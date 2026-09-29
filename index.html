@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<!--
+  Pozo Rondón · Graduado social · Badajoz
+  Concepto: «Dos platillos». Su logo es una balanza: aquí la balanza ES el logo,
+  en grande, con un platillo para la empresa y otro para el trabajador. La
+  cortina dibuja el logo y la página se abre en círculo desde el eje; el hero
+  se nivela al bajar y las seis áreas son seis pesas, tres por platillo.
+
+  Parte de la maqueta de Enrique Botejara (misma mecánica de balanza, pila y
+  pesas), rehecha en paleta, tipografía, cortina, dibujo, copy y secciones.
+  Si una de las dos se vende, la otra no se usa (decisión del 29-09-2026).
+
+  AVISO 1 — Esta maqueta lleva un MANDO DE DEMOSTRACIÓN (solo con ?revision)
+  que cambia entre dos densidades visuales. NO DEBE VIAJAR A PRODUCCIÓN.
+  Receta de borrado en README.md §"Quitar el mando de maqueta".
+
+  AVISO 2 — Datos sin confirmar marcados como [PENDIENTE] (planta del despacho).
+-->
+<html lang="es" class="sin-js densidad-platillos">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Pozo Rondón · Graduado social en Badajoz</title>
+<meta name="description" content="Despacho jurídico-laboral en Badajoz: laboral, Seguridad Social y extranjería laboral para empresas, profesionales y particulares, y apoyo a otras asesorías. Presencial y online con cita previa. 661 01 05 60.">
+<meta name="theme-color" content="#1E5C3F">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Pozo Rondón · Graduado social en Badajoz">
+<meta property="og:description" content="Prevenir pesa menos que pleitear. Prevención y gestión de riesgos jurídico-laborales para empresas y trabajadores.">
+<meta property="og:image" content="assets/og-pozo-rondon.jpg">
+<meta property="og:locale" content="es_ES">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="manifest" href="manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gelasio:ital,wght@0,500;0,700;1,500&family=Albert+Sans:ital,wght@0,400;0,500;0,600;0,700;1,500&display=swap">
+<link rel="stylesheet" href="css/estilos.css?v=1c7cc502">
+<script>
+/* Bloqueante a propósito: la densidad se resuelve antes del primer pintado.
+   [MANDO DE MAQUETA] — la parte de la densidad es eliminable, ver README. */
+(function () {
+  var h = document.documentElement;
+  h.classList.remove('sin-js');
+  h.classList.add('con-js');
+  /* red de seguridad por si main.js no llega: la cortina nunca tapa la página */
+  setTimeout(function () {
+    var c = document.getElementById('cortina');
+    if (c) c.classList.add('fuera');
+    h.classList.remove('cortina-activa');
+  }, 8000);
+  /* la densidad guardada solo cuenta en modo revisión (?revision) */
+  if (!/[?&]revision\b/.test(location.search)) return;
+  try {
+    var d = localStorage.getItem('pozorondon-densidad');
+    if (d === 'sobria' || d === 'platillos') {
+      h.classList.remove('densidad-platillos', 'densidad-sobria');
+      h.classList.add('densidad-' + d);
+    }
+  } catch (e) {}
+})();
+</script>
+<noscript><style>.cortina { display: none !important; }</style></noscript>
+</head>
+<body>
+
+<a class="salto-contenido" href="#contenido">Saltar al contenido</a>
+
+<!-- ───────── Sprite: su logo (balanza), redibujado de la cabecera de su Facebook ───────── -->
+<svg class="sprite" aria-hidden="true" focusable="false" width="0" height="0">
+  <symbol id="logo" viewBox="596 22 228 238">
+    <g fill="currentColor">
+      <circle cx="710" cy="32" r="6"/>
+      <path d="M704 38H716L710 48Z"/>
+      <path d="M708.6 46H711.4V58H708.6Z"/>
+      <path d="M627 59.4H792V62.6H627Z"/>
+      <circle cx="627" cy="61" r="4.5"/><circle cx="792" cy="61" r="4.5"/><circle cx="710" cy="61" r="6"/>
+      <path d="M669 57.2 672.8 61 669 64.8 665.2 61ZM751 57.2 754.8 61 751 64.8 747.2 61Z"/>
+      <path d="M703 67H717V84H703Z"/>
+      <path d="M702 84H718C723 92 727 102 727 114C727 128 720 137 710 137S693 128 693 114C693 102 697 92 702 84Z"/>
+      <path d="M705.5 136H714.5V229H705.5Z"/>
+      <ellipse cx="710" cy="232" rx="18" ry="3.5"/>
+      <ellipse cx="710" cy="242" rx="29" ry="4.5"/>
+      <path d="M665 246H755V255H665Z"/>
+    </g>
+    <g fill="none" stroke="currentColor">
+      <circle cx="627" cy="72" r="3.4" stroke-width="1.8"/><circle cx="792" cy="72" r="3.4" stroke-width="1.8"/>
+      <path d="M627 75.4 603 156M627 75.4 618 157M627 75.4 636 157M627 75.4 651 156M792 75.4 768 156M792 75.4 783 157M792 75.4 801 157M792 75.4 816 156" stroke-width="1.3"/>
+      <ellipse cx="627" cy="158.5" rx="26" ry="5.2" stroke-width="3.2"/>
+      <ellipse cx="792" cy="158.5" rx="26" ry="5.2" stroke-width="3.2"/>
+    </g>
+  </symbol>
+</svg>
+
+<!-- ═══════════ Cortina: el logo se dibuja y la página se abre desde el eje ═══════════ -->
+<div class="cortina" id="cortina" aria-hidden="true">
+  <div class="cortina__centro">
+    <svg class="cortina__logo" id="cortina-logo" viewBox="596 22 228 238" focusable="false">
+      <g class="cl-fijo">
+        <circle class="cl" pathLength="1" cx="710" cy="32" r="6"/>
+        <path class="cl" pathLength="1" d="M704 38H716L710 48Z"/>
+        <path class="cl" pathLength="1" d="M703 67H717V84H703Z"/>
+        <path class="cl" pathLength="1" d="M702 84H718C723 92 727 102 727 114C727 128 720 137 710 137S693 128 693 114C693 102 697 92 702 84Z"/>
+        <path class="cl" pathLength="1" d="M705.5 136H714.5V229H705.5Z"/>
+        <ellipse class="cl" pathLength="1" cx="710" cy="232" rx="18" ry="3.5"/>
+        <ellipse class="cl" pathLength="1" cx="710" cy="242" rx="29" ry="4.5"/>
+        <path class="cl" pathLength="1" d="M665 246H755V255H665Z"/>
+      </g>
+      <g class="cl-cruz" id="cortina-cruz">
+        <path class="cl" pathLength="1" d="M708.6 46H711.4V58H708.6Z"/>
+        <path class="cl" pathLength="1" d="M627 59.4H792V62.6H627Z"/>
+        <circle class="cl" pathLength="1" cx="627" cy="61" r="4.5"/>
+        <circle class="cl" pathLength="1" cx="792" cy="61" r="4.5"/>
+        <path class="cl" pathLength="1" d="M669 57.2 672.8 61 669 64.8 665.2 61ZM751 57.2 754.8 61 751 64.8 747.2 61Z"/>
+        <circle class="cl cl-eje" id="cortina-eje" pathLength="1" cx="710" cy="61" r="6"/>
+      </g>
+      <g class="cl-platillo">
+        <circle class="cl-hilo" pathLength="1" cx="627" cy="72" r="3.4"/>
+        <path class="cl-hilo" pathLength="1" d="M627 75.4 603 156M627 75.4 618 157M627 75.4 636 157M627 75.4 651 156"/>
+        <ellipse class="cl-hilo cl-plato" pathLength="1" cx="627" cy="158.5" rx="26" ry="5.2"/>
+      </g>
+      <g class="cl-platillo">
+        <circle class="cl-hilo" pathLength="1" cx="792" cy="72" r="3.4"/>
+        <path class="cl-hilo" pathLength="1" d="M792 75.4 768 156M792 75.4 783 157M792 75.4 801 157M792 75.4 816 156"/>
+        <ellipse class="cl-hilo cl-plato" pathLength="1" cx="792" cy="158.5" rx="26" ry="5.2"/>
+      </g>
+    </svg>
+    <p class="cortina__nombre" id="cortina-nombre"><span>Pozo</span> <span>Rondón</span></p>
+    <span class="cortina__filete" id="cortina-filete"></span>
+    <p class="cortina__oficio" id="cortina-oficio">Graduado social · Badajoz</p>
+  </div>
+</div>
+
+<!-- ═══════════ Cabecera ═══════════ -->
+<header class="cabecera" id="cabecera">
+  <a class="cabecera__marca" href="#inicio" aria-label="Pozo Rondón, graduado social en Badajoz: volver al inicio">
+    <svg class="cabecera__logo" width="40" height="42" aria-hidden="true" focusable="false"><use href="#logo" width="40" height="42"/></svg>
+    <span class="cabecera__nombre">Pozo Rondón<small>Graduado social · Badajoz</small></span>
+  </a>
+  <nav class="cabecera__nav" id="menu" aria-label="Principal">
+    <a href="#areas">Áreas</a>
+    <a href="#quien">Quién soy</a>
+    <a href="#opiniones">Opiniones</a>
+    <a href="#contacto">Contacto</a>
+    <a class="cabecera__llamar-movil" href="tel:+34661010560">Llamar · 661 01 05 60</a>
+  </nav>
+  <a class="boton boton--linea cabecera__llamar iman" href="tel:+34661010560"><span>661 01 05 60</span></a>
+  <button class="hamburguesa" id="hamburguesa" type="button" aria-expanded="false" aria-controls="menu">
+    <span class="visualmente-oculto">Abrir menú</span>
+    <span class="hamburguesa__linea"></span>
+    <span class="hamburguesa__linea"></span>
+  </button>
+</header>
+
+<main id="contenido">
+
+  <!-- ═══════════ Hero: su balanza, empresa y trabajador, se nivela al bajar ═══════════ -->
+  <section class="hero" id="inicio" aria-labelledby="hero-titulo">
+    <div class="hero__texto">
+      <p class="antetitulo">Graduado social<span class="solo-ancho"> colegiado</span> · Badajoz</p>
+      <h1 class="hero__titulo" id="hero-titulo" data-revelar="letras">Prevenir pesa menos que pleitear.</h1>
+      <p class="hero__entrada">Soy José Ángel Pozo Rondón y llevo un despacho jurídico-laboral para empresas, profesionales y particulares. Reviso contratos, nóminas y jornadas antes de que llegue la sanción o la demanda. Y si llega, te represento ante el Juzgado de lo Social.</p>
+      <div class="hero__acciones">
+        <a class="boton iman" href="tel:+34661010560"><span>Llamar al 661 01 05 60</span></a>
+        <a class="enlace" href="https://wa.me/34661010560" target="_blank" rel="noopener">Escríbeme por WhatsApp</a>
+      </div>
+      <p class="hero__nota"><span class="estrellas" aria-hidden="true">★★★★★</span> 5,0 en Google <span class="hero__nota-sep" aria-hidden="true">·</span> Colegiado n.º 493</p>
+    </div>
+
+    <figure class="hero__balanza">
+      <svg class="balanza" id="balanza" viewBox="0 70 600 630" role="img" aria-labelledby="balanza-titulo">
+        <title id="balanza-titulo">La balanza del logo de Pozo Rondón: un platillo para la empresa y otro para el trabajador</title>
+
+        <path class="balanza__horizonte" d="M-150 170H3000"/>
+
+        <!-- parte fija: remate, cuello, bulbo, columna y peana, como en el logo -->
+        <g class="balanza__fija">
+          <circle class="b-macizo" cx="300" cy="92.6" r="16"/>
+          <path class="balanza__indice" d="M284 110H316L300 136Z"/>
+          <path class="b-macizo" d="M281.3 186H318.7V232H281.3Z"/>
+          <path class="b-macizo" d="M281 231H319C332 252 342 278 342 310C342 347 323 373 300 373S258 347 258 310C258 278 268 252 281 231Z"/>
+          <path class="b-luz" d="M270 300C271 276 279 256 290 242"/>
+          <path class="b-macizo" d="M288 370H312V620H288Z"/>
+          <ellipse class="b-macizo" cx="300" cy="627" rx="48" ry="9"/>
+          <ellipse class="b-macizo" cx="300" cy="653" rx="77" ry="12"/>
+          <path class="b-macizo" d="M180 664H420V688H180Z"/>
+          <path class="b-suelo" d="M130 697H470"/>
+        </g>
+
+        <!-- la cruz (brazo) y el fiel: giran juntos alrededor del eje (300,170) -->
+        <g class="balanza__cruz" id="cruz">
+          <path class="balanza__fiel" d="M296.4 170 298.6 140H301.4L303.6 170Z"/>
+          <path class="b-macizo" d="M78 165.8H522V174.2H78Z"/>
+          <path class="b-macizo" d="M190.5 159 200.5 170 190.5 181 180.5 170ZM409.5 159 419.5 170 409.5 181 399.5 170Z"/>
+          <circle class="b-macizo" cx="78" cy="170" r="12"/>
+          <circle class="b-macizo" cx="522" cy="170" r="12"/>
+          <circle class="b-macizo" cx="300" cy="170" r="16"/>
+          <circle class="b-punto" cx="300" cy="170" r="4"/>
+        </g>
+
+        <!-- platillo izquierdo: la empresa (contratos) -->
+        <g class="balanza__platillo" id="platillo-izq" transform="translate(78 178)">
+          <circle class="b-aro" cx="0" cy="6" r="6"/>
+          <path class="cadena trazable" pathLength="1" d="M0 12-66 214M0 12-24 217M0 12 24 217M0 12 66 214"/>
+          <g class="carga" transform="translate(0 -76) scale(1.5)">
+            <path class="b-papel" d="M-42 190-8 184 30 189-4 195Z"/>
+            <path class="b-papel" d="M-40 185-6 179 32 184-2 190Z"/>
+            <path class="b-papel" d="M-38 180-4 174 34 179 0 185Z"/>
+            <path class="b-fina" d="M-24 179 4 175M-20 181.5 14 177M-14 184 20 179.5"/>
+          </g>
+          <ellipse class="b-plato" cx="0" cy="216" rx="70" ry="13"/>
+          <text class="b-rotulo" x="0" y="262" text-anchor="middle">EMPRESA</text>
+        </g>
+
+        <!-- platillo derecho: el trabajador (la nómina) -->
+        <g class="balanza__platillo" id="platillo-der" transform="translate(522 178)">
+          <circle class="b-aro" cx="0" cy="6" r="6"/>
+          <path class="cadena trazable" pathLength="1" d="M0 12-66 214M0 12-24 217M0 12 24 217M0 12 66 214"/>
+          <g class="carga" transform="translate(0 -76) scale(1.5)">
+            <path class="b-papel" d="M-34 191V171A16 4.5 0 0 1-2 171V191A16 4.5 0 0 1-34 191Z"/>
+            <ellipse class="b-papel" cx="-18" cy="171" rx="16" ry="4.5"/>
+            <path class="b-fina" d="M-34 187A16 4.5 0 0 0-2 187M-34 183A16 4.5 0 0 0-2 183M-34 179A16 4.5 0 0 0-2 179M-34 175A16 4.5 0 0 0-2 175"/>
+            <path class="b-papel" d="M4 192V181A15 4.2 0 0 1 34 181V192A15 4.2 0 0 1 4 192Z"/>
+            <ellipse class="b-papel" cx="19" cy="181" rx="15" ry="4.2"/>
+            <path class="b-fina" d="M4 188A15 4.2 0 0 0 34 188M4 184.5A15 4.2 0 0 0 34 184.5"/>
+          </g>
+          <ellipse class="b-plato" cx="0" cy="216" rx="70" ry="13"/>
+          <text class="b-rotulo" x="0" y="262" text-anchor="middle">TRABAJADOR</text>
+        </g>
+      </svg>
+      <figcaption class="lectura" aria-live="off">
+        <span class="lectura__rotulo">Inclinación</span>
+        <span class="lectura__grados" id="lectura-grados">0,0°</span>
+        <span class="lectura__estado" id="lectura-estado">En equilibrio</span>
+      </figcaption>
+    </figure>
+
+    <p class="hero__desliza" aria-hidden="true">Baja y la balanza se nivela</p>
+  </section>
+
+  <!-- ═══════════ Cinta ═══════════ -->
+  <div class="cinta" aria-hidden="true">
+    <div class="cinta__pista" id="cinta-pista">
+      <div class="cinta__grupo">
+        <span>Laboral</span><i></i><span>Seguridad Social</span><i></i><span>Extranjería</span><i></i><span>Juzgados de lo Social</span><i></i><span>Auditoría preventiva</span><i></i><span>Para despachos</span><i></i><span>Badajoz</span><i></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ficha del despacho: SOLO en la densidad sobria (dato en lugar de dibujo) -->
+  <section class="ficha" aria-label="Ficha del despacho">
+    <dl class="ficha__lista">
+      <div><dt>Colegiado</dt><dd>N.º 493 · Graduados Sociales de Badajoz</dd></div>
+      <div><dt>Despacho</dt><dd>Av. Sinforiano Madroñero, 10 · 06011 Badajoz</dd></div>
+      <div><dt>Teléfono y WhatsApp</dt><dd><a href="tel:+34661010560">661 01 05 60</a></dd></div>
+      <div><dt>Horario</dt><dd>Lunes a viernes, 8:30–14:30</dd></div>
+      <div><dt>Google</dt><dd>5,0 ★ en Google</dd></div>
+    </dl>
+  </section>
+
+  <!-- ═══════════ Áreas: seis pesas, tres por platillo ═══════════ -->
+  <section class="areas" id="areas" aria-labelledby="areas-titulo">
+    <div class="areas__cabeza">
+      <p class="antetitulo antetitulo--claro">Seis áreas</p>
+      <h2 class="areas__titulo" id="areas-titulo" data-revelar="palabras">Seis pesas, un solo equilibrio.</h2>
+      <p class="areas__entrada">Mi despacho es laboral, no una gestoría para todo. De la contratación al juzgado, cada pieza pesa en la siguiente: un contrato mal hecho acaba siendo un despido difícil de defender.</p>
+    </div>
+
+    <div class="areas__cuerpo">
+      <aside class="areas__balanza" aria-hidden="true">
+        <svg class="balanza balanza--mini" id="balanza-mini" viewBox="0 70 600 630" focusable="false">
+          <g class="balanza__fija">
+            <circle class="b-macizo" cx="300" cy="92.6" r="16"/>
+            <path class="balanza__indice" d="M284 110H316L300 136Z"/>
+            <path class="b-macizo" d="M281.3 186H318.7V232H281.3Z"/>
+            <path class="b-macizo" d="M281 231H319C332 252 342 278 342 310C342 347 323 373 300 373S258 347 258 310C258 278 268 252 281 231Z"/>
+            <path class="b-macizo" d="M288 370H312V620H288Z"/>
+            <ellipse class="b-macizo" cx="300" cy="627" rx="48" ry="9"/>
+            <ellipse class="b-macizo" cx="300" cy="653" rx="77" ry="12"/>
+            <path class="b-macizo" d="M180 664H420V688H180Z"/>
+          </g>
+          <g class="balanza__cruz" id="cruz-mini">
+            <path class="balanza__fiel" d="M296.4 170 298.6 140H301.4L303.6 170Z"/>
+            <path class="b-macizo" d="M78 165.8H522V174.2H78Z"/>
+            <circle class="b-macizo" cx="78" cy="170" r="12"/>
+            <circle class="b-macizo" cx="522" cy="170" r="12"/>
+            <circle class="b-macizo" cx="300" cy="170" r="16"/>
+          </g>
+          <g class="balanza__platillo" id="mini-izq" transform="translate(78 178)">
+            <circle class="b-aro" cx="0" cy="6" r="6"/>
+            <path class="cadena" d="M0 12-66 214M0 12-24 217M0 12 24 217M0 12 66 214"/>
+            <g class="pesa" data-pesa="1" transform="translate(-40 0)"><g class="pesa__caida">
+              <path class="b-pesa" d="M-15.5 212H15.5V191Q15.5 186 10.5 186H-10.5Q-15.5 186 -15.5 191Z"/>
+              <circle class="b-pesa" cx="0" cy="181.6" r="5.4"/>
+              <path class="b-pesa-luz" d="M-12.5 207H12.5"/>
+            </g></g>
+            <g class="pesa" data-pesa="3" transform="translate(0 0)"><g class="pesa__caida">
+              <path class="b-pesa" d="M-18 212H18V187Q18 182 13 182H-13Q-18 182 -18 187Z"/>
+              <circle class="b-pesa" cx="0" cy="176.8" r="6.2"/>
+              <path class="b-pesa-luz" d="M-15 207H15"/>
+            </g></g>
+            <g class="pesa" data-pesa="5" transform="translate(40 0)"><g class="pesa__caida">
+              <path class="b-pesa" d="M-10.5 212H10.5V199Q10.5 194 5.5 194H-5.5Q-10.5 194 -10.5 199Z"/>
+              <circle class="b-pesa" cx="0" cy="191.2" r="3.8"/>
+              <path class="b-pesa-luz" d="M-7.5 207H7.5"/>
+            </g></g>
+            <ellipse class="b-plato" cx="0" cy="216" rx="70" ry="13"/>
+          </g>
+          <g class="balanza__platillo" id="mini-der" transform="translate(522 178)">
+            <circle class="b-aro" cx="0" cy="6" r="6"/>
+            <path class="cadena" d="M0 12-66 214M0 12-24 217M0 12 24 217M0 12 66 214"/>
+            <g class="pesa" data-pesa="2" transform="translate(-38 0)"><g class="pesa__caida">
+              <path class="b-pesa" d="M-20.5 212H20.5V183Q20.5 178 15.5 178H-15.5Q-20.5 178 -20.5 183Z"/>
+              <circle class="b-pesa" cx="0" cy="172" r="7"/>
+              <path class="b-pesa-luz" d="M-17.5 207H17.5"/>
+            </g></g>
+            <g class="pesa" data-pesa="4" transform="translate(0 0)"><g class="pesa__caida">
+              <path class="b-pesa" d="M-10.5 212H10.5V199Q10.5 194 5.5 194H-5.5Q-10.5 194 -10.5 199Z"/>
+              <circle class="b-pesa" cx="0" cy="191.2" r="3.8"/>
+              <path class="b-pesa-luz" d="M-7.5 207H7.5"/>
+            </g></g>
+            <g class="pesa" data-pesa="6" transform="translate(38 0)"><g class="pesa__caida">
+              <path class="b-pesa" d="M-13 212H13V195Q13 190 8 190H-8Q-13 190 -13 195Z"/>
+              <circle class="b-pesa" cx="0" cy="186.4" r="4.6"/>
+              <path class="b-pesa-luz" d="M-10 207H10"/>
+            </g></g>
+            <ellipse class="b-plato" cx="0" cy="216" rx="70" ry="13"/>
+          </g>
+        </svg>
+        <ol class="reparto" id="reparto">
+          <li data-paso="1"><span>I</span> Laboral <em>izquierda</em></li>
+          <li data-paso="2"><span>II</span> Seguridad Social <em>derecha</em></li>
+          <li data-paso="3"><span>III</span> Extranjería <em>izquierda</em></li>
+          <li data-paso="4"><span>IV</span> Juzgados <em>derecha</em></li>
+          <li data-paso="5"><span>V</span> Auditoría <em>izquierda</em></li>
+          <li data-paso="6"><span>VI</span> Despachos <em>derecha</em></li>
+        </ol>
+        <p class="reparto__lectura"><span id="mini-grados">0,0°</span> <span id="mini-estado">Sin pesas</span></p>
+      </aside>
+
+      <ol class="pila" id="pila">
+        <li class="pila__item" id="area-laboral">
+          <article class="tarjeta" aria-labelledby="t-laboral">
+            <div class="tarjeta__peso">
+              <svg class="pesa-grande" viewBox="0 0 160 180" aria-hidden="true" focusable="false">
+                <ellipse class="pg-sombra" cx="80" cy="170" rx="63" ry="6"/>
+                <path class="pg-cuerpo" d="M27 168H133V104Q133 86 115 86H45Q27 86 27 104Z"/>
+                <path class="pg-fina" d="M27 152H133"/>
+                <path class="pg-cuerpo" d="M70.9 87V77H89.1V87"/>
+                <circle class="pg-cuerpo" cx="80" cy="66" r="13"/>
+                <circle class="pg-agujero" cx="80" cy="66" r="6.5"/>
+                <text class="pg-numeral" x="80" y="130" text-anchor="middle">I</text>
+              </svg>
+              <span class="tarjeta__numeral" aria-hidden="true">I</span>
+            </div>
+            <div class="tarjeta__texto">
+              <p class="tarjeta__num">Pesa I de VI</p>
+              <h3 id="t-laboral">Laboral</h3>
+              <p class="tarjeta__lema">Las relaciones laborales, en regla.</p>
+              <p>Contratar, cambiar condiciones, despedir o reestructurar: cada paso tiene su forma y su plazo. Lo reviso antes de que se firme, que es cuando todavía sale barato.</p>
+              <p class="tarjeta__lista-titulo">Lo habitual en esta área</p>
+              <ul class="tarjeta__lista">
+                <li>Contratos y convenio aplicable</li>
+                <li>Despidos y sanciones</li>
+                <li>Reestructuraciones</li>
+                <li>Jornada y registro horario</li>
+              </ul>
+              <a class="enlace" href="tel:+34661010560">Consultar lo laboral · 661 01 05 60</a>
+            </div>
+          </article>
+        </li>
+        <li class="pila__item" id="area-seguridad-social">
+          <article class="tarjeta" aria-labelledby="t-ss">
+            <div class="tarjeta__peso">
+              <svg class="pesa-grande" viewBox="0 0 160 180" aria-hidden="true" focusable="false">
+                <ellipse class="pg-sombra" cx="80" cy="170" rx="81" ry="6"/>
+                <path class="pg-cuerpo" d="M9 168H151V76Q151 58 133 58H27Q9 58 9 76Z"/>
+                <path class="pg-fina" d="M9 152H151"/>
+                <path class="pg-cuerpo" d="M68.1 59V49H91.9V59"/>
+                <circle class="pg-cuerpo" cx="80" cy="34" r="17"/>
+                <circle class="pg-agujero" cx="80" cy="34" r="8.5"/>
+                <text class="pg-numeral" x="80" y="116" text-anchor="middle">II</text>
+              </svg>
+              <span class="tarjeta__numeral" aria-hidden="true">II</span>
+            </div>
+            <div class="tarjeta__texto">
+              <p class="tarjeta__num">Pesa II de VI</p>
+              <h3 id="t-ss">Seguridad Social</h3>
+              <p class="tarjeta__lema">Ante el INSS, bien acompañado.</p>
+              <p>Nóminas, cotizaciones y trámites ante la Tesorería, y también lo que más preocupa cuando llega: una incapacidad, una prestación que se deniega o una pensión mal calculada.</p>
+              <p class="tarjeta__lista-titulo">Lo habitual en esta área</p>
+              <ul class="tarjeta__lista">
+                <li>Nóminas y seguros sociales</li>
+                <li>Altas, bajas y variaciones</li>
+                <li>Incapacidad temporal y permanente</li>
+                <li>Prestaciones y reclamaciones</li>
+              </ul>
+              <a class="enlace" href="tel:+34661010560">Consultar Seguridad Social · 661 01 05 60</a>
+            </div>
+          </article>
+        </li>
+        <li class="pila__item" id="area-extranjeria">
+          <article class="tarjeta" aria-labelledby="t-extranjeria">
+            <div class="tarjeta__peso">
+              <svg class="pesa-grande" viewBox="0 0 160 180" aria-hidden="true" focusable="false">
+                <ellipse class="pg-sombra" cx="80" cy="170" rx="72" ry="6"/>
+                <path class="pg-cuerpo" d="M18 168H142V90Q142 72 124 72H36Q18 72 18 90Z"/>
+                <path class="pg-fina" d="M18 152H142"/>
+                <path class="pg-cuerpo" d="M69.5 73V63H90.5V73"/>
+                <circle class="pg-cuerpo" cx="80" cy="50" r="15"/>
+                <circle class="pg-agujero" cx="80" cy="50" r="7.5"/>
+                <text class="pg-numeral pg-numeral--peque" x="80" y="123" text-anchor="middle">III</text>
+              </svg>
+              <span class="tarjeta__numeral" aria-hidden="true">III</span>
+            </div>
+            <div class="tarjeta__texto">
+              <p class="tarjeta__num">Pesa III de VI</p>
+              <h3 id="t-extranjeria">Extranjería</h3>
+              <p class="tarjeta__lema">Tu permiso, también a distancia.</p>
+              <p>Extranjería laboral: autorizaciones de residencia y trabajo, renovaciones y expedientes, tanto para quien llega como para la empresa que le contrata. Lo tramito 100&nbsp;% online para toda España.</p>
+              <p class="tarjeta__lista-titulo">Lo habitual en esta área</p>
+              <ul class="tarjeta__lista">
+                <li>Residencia y trabajo</li>
+                <li>Renovaciones</li>
+                <li>Profesionales altamente cualificados</li>
+                <li>Contratar a personal extranjero</li>
+              </ul>
+              <a class="enlace" href="https://wa.me/34661010560" target="_blank" rel="noopener">Consultar extranjería por WhatsApp</a>
+            </div>
+          </article>
+        </li>
+        <li class="pila__item" id="area-juzgados">
+          <article class="tarjeta" aria-labelledby="t-juzgados">
+            <div class="tarjeta__peso">
+              <svg class="pesa-grande" viewBox="0 0 160 180" aria-hidden="true" focusable="false">
+                <ellipse class="pg-sombra" cx="80" cy="170" rx="45" ry="6"/>
+                <path class="pg-cuerpo" d="M45 168H115V128Q115 114 101 114H59Q45 114 45 128Z"/>
+                <path class="pg-fina" d="M45 152H115"/>
+                <path class="pg-cuerpo" d="M73.7 115V105H86.3V115"/>
+                <circle class="pg-cuerpo" cx="80" cy="98" r="9"/>
+                <circle class="pg-agujero" cx="80" cy="98" r="4.5"/>
+                <text class="pg-numeral" x="80" y="144" text-anchor="middle">IV</text>
+              </svg>
+              <span class="tarjeta__numeral" aria-hidden="true">IV</span>
+            </div>
+            <div class="tarjeta__texto">
+              <p class="tarjeta__num">Pesa IV de VI</p>
+              <h3 id="t-juzgados">Juzgados de lo Social</h3>
+              <p class="tarjeta__lema">Si llega al juzgado, voy contigo.</p>
+              <p>Como graduado social puedo representarte ante los Juzgados de lo Social. Primero se intenta el acuerdo en la conciliación; si no lo hay, defiendo el caso en el juicio.</p>
+              <p class="tarjeta__lista-titulo">Lo habitual en esta área</p>
+              <ul class="tarjeta__lista">
+                <li>Conciliaciones</li>
+                <li>Despidos y reclamaciones de cantidad</li>
+                <li>Sanciones</li>
+                <li>Demandas de Seguridad Social</li>
+              </ul>
+              <a class="enlace" href="tel:+34661010560">Consultar un caso · 661 01 05 60</a>
+            </div>
+          </article>
+        </li>
+        <li class="pila__item" id="area-auditoria">
+          <article class="tarjeta" aria-labelledby="t-auditoria">
+            <div class="tarjeta__peso">
+              <svg class="pesa-grande" viewBox="0 0 160 180" aria-hidden="true" focusable="false">
+                <ellipse class="pg-sombra" cx="80" cy="170" rx="45" ry="6"/>
+                <path class="pg-cuerpo" d="M45 168H115V128Q115 114 101 114H59Q45 114 45 128Z"/>
+                <path class="pg-fina" d="M45 152H115"/>
+                <path class="pg-cuerpo" d="M73.7 115V105H86.3V115"/>
+                <circle class="pg-cuerpo" cx="80" cy="98" r="9"/>
+                <circle class="pg-agujero" cx="80" cy="98" r="4.5"/>
+                <text class="pg-numeral" x="80" y="144" text-anchor="middle">V</text>
+              </svg>
+              <span class="tarjeta__numeral" aria-hidden="true">V</span>
+            </div>
+            <div class="tarjeta__texto">
+              <p class="tarjeta__num">Pesa V de VI</p>
+              <h3 id="t-auditoria">Auditoría preventiva</h3>
+              <p class="tarjeta__lema">El riesgo, antes de que sea sanción.</p>
+              <p>Una revisión laboral completa de tu empresa, hecha con calma y antes de que la haga otro. Veo lo que miraría la Inspección de Trabajo y te digo qué corregir y en qué orden.</p>
+              <p class="tarjeta__lista-titulo">Lo que reviso</p>
+              <ul class="tarjeta__lista">
+                <li>Contratos y nóminas</li>
+                <li>Jornada y registro horario</li>
+                <li>Cotización y convenio</li>
+                <li>Requerimientos de la Inspección</li>
+              </ul>
+              <a class="enlace" href="tel:+34661010560">Pedir una revisión · 661 01 05 60</a>
+            </div>
+          </article>
+        </li>
+        <li class="pila__item" id="area-despachos">
+          <article class="tarjeta" aria-labelledby="t-despachos">
+            <div class="tarjeta__peso">
+              <svg class="pesa-grande" viewBox="0 0 160 180" aria-hidden="true" focusable="false">
+                <ellipse class="pg-sombra" cx="80" cy="170" rx="54" ry="6"/>
+                <path class="pg-cuerpo" d="M36 168H124V117.6Q124 100 106.4 100H53.6Q36 100 36 117.6Z"/>
+                <path class="pg-fina" d="M36 152H124"/>
+                <path class="pg-cuerpo" d="M72.3 101V91H87.7V101"/>
+                <circle class="pg-cuerpo" cx="80" cy="82" r="11"/>
+                <circle class="pg-agujero" cx="80" cy="82" r="5.5"/>
+                <text class="pg-numeral" x="80" y="137" text-anchor="middle">VI</text>
+              </svg>
+              <span class="tarjeta__numeral" aria-hidden="true">VI</span>
+            </div>
+            <div class="tarjeta__texto">
+              <p class="tarjeta__num">Pesa VI de VI</p>
+              <h3 id="t-despachos">Para otros despachos</h3>
+              <p class="tarjeta__lema">Tu departamento laboral, en marca blanca.</p>
+              <p>Asesorías y despachos me delegan sus áreas laborales, jurídicas y de gestión: yo hago el trabajo técnico y tu cliente sigue siendo tuyo.</p>
+              <p class="tarjeta__lista-titulo">Lo habitual en esta área</p>
+              <ul class="tarjeta__lista">
+                <li>Nóminas y seguros sociales</li>
+                <li>Contratos y altas</li>
+                <li>Consultas técnicas</li>
+                <li>Apoyo en inspecciones</li>
+              </ul>
+              <a class="enlace" href="mailto:despacho@pozorondon.es">Escribir a despacho@pozorondon.es</a>
+            </div>
+          </article>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ═══════════ Quién soy ═══════════ -->
+  <section class="quien" id="quien" aria-labelledby="quien-titulo">
+    <div class="filete" aria-hidden="true">
+      <svg viewBox="0 0 400 20" preserveAspectRatio="xMidYMid meet" focusable="false">
+        <path class="filete__linea" d="M8 10H184"/>
+        <path class="filete__linea filete__linea--der" d="M392 10H216"/>
+        <path class="filete__rombo" d="M200 2 208 10 200 18 192 10Z"/>
+      </svg>
+    </div>
+
+    <div class="quien__cuerpo">
+      <figure class="retrato">
+        <div class="retrato__foto"><img src="assets/retrato-jose-angel-pozo-rondon.jpg" width="640" height="640" loading="lazy" decoding="async" alt="José Ángel Pozo Rondón, con traje gris y gafas, en su despacho"></div>
+        <figcaption>José Ángel Pozo Rondón · Colegiado n.º 493</figcaption>
+      </figure>
+
+      <div class="quien__texto">
+        <p class="antetitulo antetitulo--oscuro">Quién lleva tu caso</p>
+        <h2 class="quien__titulo" id="quien-titulo" data-revelar="palabras">Graduado social, colegiado en Badajoz.</h2>
+        <p>Soy José Ángel Pozo Rondón, colegiado n.º 493 del Colegio Oficial de Graduados Sociales de Badajoz. Mi despacho es jurídico-laboral: trabajo para empresas, profesionales y particulares, y doy apoyo a otras asesorías y despachos. Atiendo con cita previa, en persona en Badajoz y online en toda España.</p>
+        <figure class="cita">
+          <blockquote>
+            <p class="cita__texto" data-revelar="palabras">«No vendo milagros. Vendo certezas para que decidas con seguridad.»</p>
+          </blockquote>
+          <figcaption class="cita__autor">
+            <span class="cita__nombre">José Ángel Pozo Rondón</span>
+            <span class="cita__fuente">En su perfil de divulgación, @mentelaboralista</span>
+          </figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ Opiniones: las reseñas de Google, sin apellidos completos y sin recuento ═══════════ -->
+  <section class="opiniones" id="opiniones" aria-labelledby="opiniones-titulo">
+    <div class="opiniones__cabeza">
+      <div>
+        <p class="antetitulo antetitulo--oscuro">Opiniones en Google</p>
+        <h2 class="opiniones__titulo" id="opiniones-titulo" data-revelar="palabras">Lo que cuentan quienes ya han pasado por el despacho.</h2>
+      </div>
+      <div class="opiniones__nota">
+        <div class="sello-nota">
+          <svg class="sello-nota__grabado" viewBox="0 0 240 240" aria-hidden="true" focusable="false">
+            <circle class="sn-linea" cx="120" cy="120" r="114"/>
+            <circle class="sn-fina" cx="120" cy="120" r="106"/>
+            <circle class="sn-puntos" cx="120" cy="120" r="100"/>
+            <path id="sn-arco" class="sn-guia" d="M34 120A86 86 0 0 1 206 120"/>
+            <text class="sn-texto"><textPath href="#sn-arco" startOffset="50%" text-anchor="middle">VALORACIÓN EN GOOGLE</textPath></text>
+          </svg>
+          <p class="sello-nota__dato">
+            <span class="sello-nota__cifra" data-contador="5" data-decimales="1">5,0</span>
+            <span class="sello-nota__estrellas" aria-hidden="true">★★★★★</span>
+            <span class="sello-nota__pie">en Google</span>
+          </p>
+        </div>
+        <a class="enlace opiniones__google" href="https://www.google.com/maps/search/?api=1&amp;query=POZO+ROND%C3%93N+-+GRADUADO+SOCIAL+Badajoz" target="_blank" rel="noopener">Ver la ficha en Google y dejar una opinión</a>
+      </div>
+    </div>
+
+    <div class="opiniones__lista">
+      <figure class="opinion opinion--destacada">
+        <span class="opinion__estrellas" aria-label="5 de 5 estrellas">★★★★★</span>
+        <blockquote><p>«He utilizado los servicios de Jose para renovar mi visado de trabajador altamente cualificado, así como los de mis familiares. Posee un gran conocimiento, explica el proceso con claridad y brindó apoyo en todo momento. Sus tarifas también son muy razonables. Recomiendo encarecidamente los servicios de Jose.»</p></blockquote>
+        <figcaption><span class="opinion__nombre">Sunil S.</span><span class="opinion__tema">Extranjería · renovación de visados</span></figcaption>
+      </figure>
+      <figure class="opinion">
+        <span class="opinion__estrellas" aria-label="5 de 5 estrellas">★★★★★</span>
+        <blockquote><p>«Excelentes profesionales y buena atención personal.»</p></blockquote>
+        <figcaption><span class="opinion__nombre">Ruth R.</span><span class="opinion__tema">Reseña en Google</span></figcaption>
+      </figure>
+      <figure class="opinion">
+        <span class="opinion__estrellas" aria-label="5 de 5 estrellas">★★★★★</span>
+        <blockquote lang="en"><p>«Thank you team for providing very good service to me.»</p></blockquote>
+        <p class="opinion__traduccion">«Gracias al equipo por darme tan buen servicio.»</p>
+        <figcaption><span class="opinion__nombre">Raju P.</span><span class="opinion__tema">Reseña en Google, en inglés</span></figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ═══════════ Contacto ═══════════ -->
+  <section class="contacto" id="contacto" aria-labelledby="contacto-titulo">
+    <div class="contacto__cabeza">
+      <p class="antetitulo antetitulo--claro">Contacto</p>
+      <h2 class="contacto__titulo" id="contacto-titulo" data-revelar="palabras">Cuéntame tu caso antes de firmar nada.</h2>
+    </div>
+
+    <div class="contacto__cuerpo">
+      <dl class="datos">
+        <div class="datos__fila">
+          <dt>Teléfono</dt>
+          <dd><a class="datos__telefono" href="tel:+34661010560">661 01 05 60</a><span class="datos__pie">También por WhatsApp</span></dd>
+        </div>
+        <div class="datos__fila">
+          <dt>Correo</dt>
+          <dd><a href="mailto:despacho@pozorondon.es">despacho@pozorondon.es</a></dd>
+        </div>
+        <div class="datos__fila">
+          <dt>Horario</dt>
+          <dd>Lunes a viernes, de 8:30 a 14:30, con cita previa</dd>
+        </div>
+        <div class="datos__fila">
+          <dt>Despacho</dt>
+          <dd>Av. Sinforiano Madroñero, 10 <span class="marca-pendiente">[PENDIENTE: planta y oficina]</span><br>06011 Badajoz</dd>
+        </div>
+        <div class="datos__fila">
+          <dt>A distancia</dt>
+          <dd>Atención online con cita previa, en toda España.</dd>
+        </div>
+        <div class="datos__acciones">
+          <a class="boton iman" href="tel:+34661010560"><span>Llamar ahora</span></a>
+          <a class="boton boton--linea iman" href="https://wa.me/34661010560" target="_blank" rel="noopener"><span>WhatsApp</span></a>
+          <a class="enlace" href="https://www.google.com/maps/search/?api=1&amp;query=Avenida+Sinforiano+Madro%C3%B1ero+10+06011+Badajoz" target="_blank" rel="noopener">Cómo llegar (abre Google Maps)</a>
+        </div>
+      </dl>
+
+      <div class="mapa">
+        <div class="map-consent" id="mapa-consentimiento">
+          <svg class="map-consent__plano" viewBox="0 0 320 200" aria-hidden="true" focusable="false">
+            <path class="mc-calle" d="M-10 150C60 138 120 120 180 96S290 50 330 44"/>
+            <path class="mc-calle mc-calle--fina" d="M60 -10 110 210M200 -10 170 210M-10 70H330"/>
+            <circle class="mc-punto" cx="164" cy="104" r="6"/>
+            <circle class="mc-onda" cx="164" cy="104" r="16"/>
+          </svg>
+          <p class="map-consent__texto">El mapa lo sirve Google, que pone sus propias cookies. Solo se carga si lo pides.</p>
+          <button class="boton boton--mini" id="mapa-boton" type="button">Cargar el mapa</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ═══════════ Pie ═══════════ -->
+<footer class="pie">
+  <div class="pie__marca">
+    <svg class="pie__logo" width="76" height="80" role="img" aria-label="Logo de Pozo Rondón, una balanza"><use href="#logo" width="76" height="80"/></svg>
+    <p><span class="pie__nombre">Pozo Rondón</span><span class="pie__oficio">Graduado social</span><em class="pie__lema">Prevención y gestión de riesgos jurídico-laborales</em></p>
+  </div>
+  <div class="pie__columna">
+    <h2>Contacto</h2>
+    <p><a href="tel:+34661010560">661 01 05 60</a></p>
+    <p><a href="https://wa.me/34661010560" target="_blank" rel="noopener">WhatsApp</a></p>
+    <p><a href="mailto:despacho@pozorondon.es">despacho@pozorondon.es</a></p>
+  </div>
+  <div class="pie__columna">
+    <h2>En esta página</h2>
+    <p><a href="#areas">Las seis áreas</a></p>
+    <p><a href="#quien">Quién soy</a></p>
+    <p><a href="#opiniones">Opiniones</a></p>
+    <p><a href="#contacto">Contacto</a></p>
+  </div>
+  <div class="pie__legal">
+    <p>© <span id="anio">2026</span> José Ángel Pozo Rondón · Graduado social colegiado n.º 493 · Colegio Oficial de Graduados Sociales de Badajoz</p>
+    <p><a href="aviso-legal.html">Aviso legal</a> · <a href="privacidad.html">Privacidad y cookies</a></p>
+    <p class="pie__creditos">Maqueta de presentación. Balanza y pesas dibujadas para esta web a partir de su logo. Tipografías Gelasio y Albert Sans (licencia OFL).</p>
+  </div>
+</footer>
+
+<!-- ═══════════ Aviso de cookies ═══════════ -->
+<div class="cookies" id="cookies" hidden>
+  <p class="cookies__texto">
+    Esta web no usa cookies de seguimiento. Solo guarda en tu navegador que ya has visto este aviso
+    y, si lo pides, carga el mapa de Google, que sí pone las suyas. <a href="privacidad.html">Más detalle</a>.
+  </p>
+  <div class="cookies__acciones">
+    <button class="boton boton--mini" id="cookies-aceptar" type="button">De acuerdo</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     [MANDO DE MAQUETA] — SOLO REVISIÓN INTERNA. NO PUBLICAR.
+     Borrar este bloque, el bloque CSS marcado igual en estilos.css, el bloque
+     JS marcado igual en main.js y la parte de densidad del script del <head>.
+     ═══════════════════════════════════════════════════════════════════════ -->
+<div class="mando" id="mando" hidden>
+  <span class="mando__titulo">Versión</span>
+  <div class="mando__botones" role="group" aria-label="Densidad visual de la maqueta">
+    <button type="button" data-densidad="platillos" aria-pressed="true">Platillos</button>
+    <button type="button" data-densidad="sobria" aria-pressed="false">Sobria</button>
+  </div>
+  <span class="mando__pie">Dos versiones de la misma web</span>
+</div>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LegalService",
+  "name": "Pozo Rondón – Graduado Social",
+  "description": "Despacho jurídico-laboral especializado en asesoramiento laboral, de Seguridad Social y extranjería laboral para empresas, profesionales y particulares, y en externalización para otras asesorías y despachos. Atención presencial y online con cita previa en toda España.",
+  "founder": { "@type": "Person", "name": "José Ángel Pozo Rondón", "jobTitle": "Graduado social" },
+  "telephone": "+34661010560",
+  "email": "despacho@pozorondon.es",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Avenida Sinforiano Madroñero, 10",
+    "addressLocality": "Badajoz",
+    "postalCode": "06011",
+    "addressRegion": "Badajoz",
+    "addressCountry": "ES"
+  },
+  "openingHours": "Mo-Fr 08:30-14:30",
+  "areaServed": ["Badajoz", "España"]
+}
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js" defer></script>
+<script src="js/main.js?v=35851e09" defer></script>
+</body>
+</html>

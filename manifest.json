@@ -1,0 +1,9 @@
+{
+  "name": "Pozo Rondón · Graduado social en Badajoz",
+  "short_name": "Pozo Rondón",
+  "start_url": "./",
+  "display": "browser",
+  "background_color": "#F7F6F1",
+  "theme_color": "#1E5C3F",
+  "icons": [{ "src": "assets/favicon.svg", "sizes": "any", "type": "image/svg+xml" }]
+}
