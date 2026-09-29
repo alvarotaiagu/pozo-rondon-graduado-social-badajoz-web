@@ -473,27 +473,63 @@ h1, h2, h3 { font-weight: 700; margin: 0; }
 .tarjeta__tel { font-size: .88rem; color: var(--tinta-suave); text-decoration: none; }
 .tarjeta__tel:hover { color: var(--verde); text-decoration: underline; text-underline-offset: 3px; }
 
-/* ═══════════════ progreso: la barra verde de su portada, fija, que se llena al bajar ═══════════════ */
-.progreso {
-  position: fixed; left: 0; top: 0; bottom: 0; z-index: 410;
-  width: 8px;
-  background: var(--verde-pastel);
-  box-shadow: 1px 0 0 rgba(255, 255, 255, .35);   /* se lee también sobre las secciones verdes */
-  pointer-events: none;
+/* ═══════════════ regla de precisión: escala graduada en el borde derecho ═══════════════
+   Una tira de papel con 60 marcas finas, una raya larga por sección y el triángulo de
+   su logo como índice. El rótulo de la sección va a su izquierda. Con hover o foco se
+   despliega un panel con todas las secciones como botones. */
+.regla {
+  position: fixed; right: 0; top: calc(var(--cab) + 16px); bottom: 24px; z-index: 405;
+  width: 44px;
+  transition: width .45s var(--suave);
 }
-.progreso__relleno {
-  position: absolute; inset: 0;
-  background: var(--verde);
-  transform: scaleY(var(--p, 0)); transform-origin: 50% 0;
+.regla:hover, .regla:focus-within { width: 280px; }
+.regla__fondo {
+  position: absolute; inset: -10px 0 -10px 0; border-radius: 10px 0 0 10px;
+  background: linear-gradient(90deg, rgba(247, 246, 241, 0), rgba(247, 246, 241, .97) 20%);
+  opacity: 0; transition: opacity .35s ease; pointer-events: none;
 }
-.progreso__muesca {                 /* una por pesa: sobresale como la marca de una regla */
-  position: absolute; left: 0; width: 14px; height: 3px; margin-top: -1.5px;
-  top: calc(var(--en, 0) * 100%);
-  background: var(--verde-tenue);
-  transition: background-color .3s ease, width .35s var(--suave);
+.regla:hover .regla__fondo, .regla:focus-within .regla__fondo { opacity: 1; }
+.regla__tira {
+  position: absolute; right: 8px; top: 0; bottom: 0; width: 24px;
+  border-radius: 12px;
+  background: rgba(247, 246, 241, .9);
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+  box-shadow: 0 0 0 1px rgba(30, 92, 63, .2), 0 10px 26px -16px rgba(0, 0, 0, .45);
 }
-.progreso__muesca.puesta { background: var(--verde); width: 18px; box-shadow: 0 0 0 1px rgba(255, 255, 255, .6); }
-.sin-js .progreso { display: none; }
+.regla__via { position: absolute; right: 19px; top: 16px; bottom: 16px; width: 1px; background: rgba(30, 92, 63, .35); }
+.regla__marca { position: absolute; right: 0; width: 5px; height: 1px; background: var(--verde); opacity: .45; }
+.regla__marca--media { width: 8px; opacity: .7; }
+.regla__seccion { position: absolute; right: -6px; width: 14px; height: 2px; margin-top: -1px; background: var(--verde); }
+.regla__indice {
+  position: absolute; right: -11px; margin-top: -6px; z-index: 2;
+  width: 0; height: 0;
+  border-top: 6px solid transparent; border-bottom: 6px solid transparent; border-right: 10px solid var(--verde);
+}
+.regla__rotulo {
+  position: absolute; right: 22px; margin-top: -9px; z-index: 2;
+  padding: 0 8px; border-radius: 3px;
+  font: 600 .6rem/18px var(--tipo-texto); letter-spacing: .2em; text-transform: uppercase; white-space: nowrap;
+  color: var(--verde); background: rgba(247, 246, 241, .96);
+  box-shadow: 0 0 0 1px rgba(30, 92, 63, .2);
+  transition: opacity .3s ease;
+}
+.regla__rotulo:empty { display: none; }
+.regla__rotulo span { display: inline-block; animation: regla-letra .5s var(--suave) both; }
+@keyframes regla-letra { from { transform: translateY(80%); opacity: 0; } to { transform: none; opacity: 1; } }
+.regla:hover .regla__rotulo, .regla:focus-within .regla__rotulo { opacity: 0; }
+.regla__num {
+  position: absolute; right: 24px; transform: translateY(-50%);
+  display: flex; align-items: baseline; gap: .45rem;
+  padding: .3rem 0; border: 0; background: none; cursor: pointer;
+  white-space: nowrap; color: var(--verde);
+  opacity: 0; pointer-events: none;
+  transition: opacity .3s ease, color .25s ease;
+}
+.regla__num em { font: 700 .8rem/1 var(--tipo-titulo); font-style: normal; min-width: 1.4em; text-align: right; order: 2; }
+.regla__num span { font: 600 .62rem/1 var(--tipo-texto); letter-spacing: .16em; text-transform: uppercase; order: 1; }
+.regla:hover .regla__num, .regla:focus-within .regla__num { opacity: .6; pointer-events: auto; }
+.regla:hover .regla__num.activo, .regla:focus-within .regla__num.activo, .regla__num:hover, .regla__num:focus-visible { opacity: 1; color: var(--tinta); }
+.sin-js .regla { display: none; }
 
 /* ═══════════════ estado del despacho: abierto / cerrado, con la hora de Madrid ═══════════════ */
 .estado-punto {
@@ -844,8 +880,18 @@ html.con-cursor, html.con-cursor * { cursor: none !important; }
     padding: calc(var(--cab) + .4rem) var(--margen) 2.6rem;
     gap: .6rem;
   }
-  .progreso { width: 5px; }
-  .progreso__muesca { width: 9px; }
+  /* en móvil: la tira más estrecha, sin panel (no hay hover) y por encima de la barra de contacto;
+     el rótulo solo asoma un momento al cambiar de sección */
+  .regla { width: 30px; top: calc(var(--cab) + 12px); bottom: 104px; }
+  .regla:hover, .regla:focus-within { width: 30px; }
+  .regla__tira { width: 14px; right: 3px; }
+  .regla__via { right: 10px; top: 12px; bottom: 12px; }
+  .regla__num, .regla__fondo { display: none; }
+  .regla__rotulo { opacity: 0; }
+  .regla--aviso .regla__rotulo { opacity: 1; }
+  .regla:hover .regla__rotulo { opacity: 0; }
+  .regla--aviso:hover .regla__rotulo { opacity: 1; }
+  .menu-abierto ~ .regla { opacity: 0; visibility: hidden; }
   .hero__balanza { order: -1; height: clamp(220px, 34svh, 380px); width: 100%; }
   .hero .antetitulo { margin-bottom: .8rem; }
   .solo-ancho { display: none; }

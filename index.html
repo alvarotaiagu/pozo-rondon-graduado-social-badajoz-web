@@ -34,7 +34,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gelasio:ital,wght@0,500;0,700;1,500&family=Albert+Sans:ital,wght@0,400;0,500;0,600;0,700;1,500&display=swap">
-<link rel="stylesheet" href="css/estilos.css?v=057274f7">
+<link rel="stylesheet" href="css/estilos.css?v=e97d18ce">
 <script>
 /* Bloqueante a propósito: la densidad se resuelve antes del primer pintado.
    [MANDO DE MAQUETA] — la parte de la densidad es eliminable, ver README. */
@@ -133,7 +133,22 @@
 <!-- ═══════════ Cabecera ═══════════ -->
 <header class="cabecera" id="cabecera">
   <a class="cabecera__marca" href="#inicio" aria-label="Pozo Rondón, graduado social en Badajoz: volver al inicio">
-    <svg class="cabecera__logo" width="40" height="42" aria-hidden="true" focusable="false"><use href="#logo" width="40" height="42"/></svg>
+    <svg class="cabecera__logo" width="40" height="42" viewBox="596 22 228 238" aria-hidden="true" focusable="false">
+      <!-- su logo por piezas: el brazo y los platillos se nivelan a lo largo de la página -->
+      <g fill="currentColor">
+        <circle cx="710" cy="32" r="6"/><path d="M704 38H716L710 48Z"/>
+        <path d="M703 67H717V84H703Z"/>
+        <path d="M702 84H718C723 92 727 102 727 114C727 128 720 137 710 137S693 128 693 114C693 102 697 92 702 84Z"/>
+        <path d="M705.5 136H714.5V229H705.5Z"/><ellipse cx="710" cy="232" rx="18" ry="3.5"/><ellipse cx="710" cy="242" rx="29" ry="4.5"/><path d="M665 246H755V255H665Z"/>
+      </g>
+      <g class="lc-cruz" fill="currentColor">
+        <path d="M708.6 46H711.4V58H708.6Z"/><path d="M627 59.4H792V62.6H627Z"/>
+        <circle cx="627" cy="61" r="4.5"/><circle cx="792" cy="61" r="4.5"/><circle cx="710" cy="61" r="6"/>
+        <path d="M669 57.2 672.8 61 669 64.8 665.2 61ZM751 57.2 754.8 61 751 64.8 747.2 61Z"/>
+      </g>
+      <g class="lc-plato" transform="translate(627 72)" fill="none" stroke="currentColor"><circle cx="0" cy="0" r="3.4" stroke-width="1.8"/><path d="M0 3.4-24 84M0 3.4-9 85M0 3.4 9 85M0 3.4 24 84" stroke-width="1.3"/><ellipse cx="0" cy="86.5" rx="26" ry="5.2" stroke-width="3.2"/></g>
+      <g class="lc-plato" transform="translate(792 72)" fill="none" stroke="currentColor"><circle cx="0" cy="0" r="3.4" stroke-width="1.8"/><path d="M0 3.4-24 84M0 3.4-9 85M0 3.4 9 85M0 3.4 24 84" stroke-width="1.3"/><ellipse cx="0" cy="86.5" rx="26" ry="5.2" stroke-width="3.2"/></g>
+    </svg>
     <span class="cabecera__nombre">Pozo Rondón<small>Graduado social · Badajoz</small></span>
   </a>
   <nav class="cabecera__nav" id="menu" aria-label="Principal">
@@ -688,10 +703,16 @@
   <a class="barra-movil__wa" href="https://wa.me/34661010560?text=Hola%2C%20Jos%C3%A9%20%C3%81ngel.%20Te%20escribo%20desde%20tu%20web%3A%20" target="_blank" rel="noopener">WhatsApp</a>
 </nav>
 
-<!-- ═══════════ Progreso: la barra verde de su marca se llena al bajar; una muesca por pesa ═══════════ -->
-<div class="progreso" id="progreso" aria-hidden="true">
-  <span class="progreso__relleno" id="progreso-relleno"></span>
-</div>
+<!-- ═══════════ Regla de precisión: escala graduada en el borde derecho; el índice es el triángulo
+     de su logo. Con el ratón se despliega y lleva a cada sección (los botones los pone el JS). ═══════════ -->
+<nav class="regla" id="regla" aria-label="Secciones de la página">
+  <span class="regla__fondo" aria-hidden="true"></span>
+  <span class="regla__tira" aria-hidden="true"></span>
+  <div class="regla__via" id="regla-via">
+    <span class="regla__indice" aria-hidden="true"></span>
+    <span class="regla__rotulo" id="regla-rotulo" aria-hidden="true"></span>
+  </div>
+</nav>
 
 <!-- ═══════════ Aviso de cookies ═══════════ -->
 <div class="cookies" id="cookies" hidden>
@@ -744,6 +765,6 @@
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js" defer></script>
-<script src="js/main.js?v=fae33102" defer></script>
+<script src="js/main.js?v=e421d388" defer></script>
 </body>
 </html>

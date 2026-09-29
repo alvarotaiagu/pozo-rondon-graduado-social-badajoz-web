@@ -187,12 +187,12 @@ try {
     const IDS = ['#area-laboral', '#area-seguridad-social', '#area-extranjeria', '#area-juzgados', '#area-auditoria', '#area-despachos'];
     const ESPERADO = ['Cae a la izquierda', 'Cae a la derecha', 'Cae a la izquierda', 'Cae a la izquierda', 'Cae a la izquierda', 'En equilibrio'];
     const pasos = [];
-    const muescasEncendidas = [];
+    const rotulos = [];
     for (let i = 0; i < IDS.length; i++) {
       await hasta(page, IDS[i], 20);
       await page.waitForTimeout(i === IDS.length - 1 ? 2600 : 900);
       pasos.push(await mini(page));
-      muescasEncendidas.push(await page.evaluate(() => document.querySelectorAll('.progreso__muesca.puesta').length));
+      rotulos.push(await page.evaluate(() => document.getElementById('regla').dataset.seccion));
       if (conCapturas) await page.screenshot({ path: foto('05-area-' + (i + 1) + '.png') });
       if (i === 1) {
         const apilada = await page.evaluate(() => getComputedStyle(document.querySelector('#area-laboral .tarjeta')).transform);
@@ -201,7 +201,7 @@ try {
     }
     comprobar(m0.puestas === 0 && pasos.slice(0, 5).every((p, i) => p.puestas === i + 1 && p.estado === ESPERADO[i]),
       'cada tarjeta que se posa deja caer su pesa y la balanza cabecea → ' + JSON.stringify([m0].concat(pasos.slice(0, 5)).map(p => p.puestas + ' ' + p.estado)));
-    comprobar(muescasEncendidas.every((n, i) => n === pasos[i].puestas), 'progreso: cada muesca del borde se enciende a la vez que cae su pesa → ' + JSON.stringify(muescasEncendidas));
+    comprobar(rotulos.join('|') === 'Laboral|Seguridad Social|Extranjería|Juzgados de lo Social|Auditoría preventiva|Para otros despachos', 'regla: nombra la sección de cada pesa a la vez que cae → ' + rotulos.join(' | '));
     const m6 = pasos[5];
     comprobar(m6.puestas === 6 && m6.estado === 'En equilibrio' && m6.grados === '0,0°', 'solo con las seis pesas la balanza pequeña se equilibra → ' + JSON.stringify(m6));
 
@@ -427,14 +427,38 @@ try {
     await contexto.addInitScript(() => { try { localStorage.setItem('pozorondon-cookies', 'ok'); } catch (e) {} });
     await page.goto(base + '/index.html', { waitUntil: 'networkidle' });
     await page.waitForTimeout(4800);
-    const arriba = await page.evaluate(() => ({ p: parseFloat(getComputedStyle(document.getElementById('progreso')).getPropertyValue('--p')), muescas: document.querySelectorAll('.progreso__muesca').length, encendidas: document.querySelectorAll('.progreso__muesca.puesta').length, marcas: [...document.querySelectorAll('.progreso__muesca')].map(m => parseFloat(m.style.getPropertyValue('--en'))) }));
-    comprobar(arriba.p < 0.02 && arriba.muescas === 6 && arriba.encendidas === 0, 'progreso: arriba del todo, vacío y con seis muescas apagadas → ' + JSON.stringify(arriba));
-    comprobar(arriba.marcas.every((m, i) => m > 0.05 && m < 0.95 && (i === 0 || m > arriba.marcas[i - 1])), 'progreso: las muescas van en orden y dentro de la página → ' + JSON.stringify(arriba.marcas));
+    const lee = () => page.evaluate(() => {
+      const via = document.getElementById('regla-via').getBoundingClientRect(), ind = document.querySelector('.regla__indice').getBoundingClientRect();
+      return { seccion: document.getElementById('regla').dataset.seccion, rotulo: document.getElementById('regla-rotulo').textContent.replace(/\u00a0/g, ' '),
+        indice: Math.round((ind.top + ind.height / 2 - via.top) / via.height * 100), marcas: document.querySelectorAll('.regla__marca').length,
+        secciones: [...document.querySelectorAll('.regla__num')].map(b => parseFloat(b.style.top)), grados: parseFloat(document.querySelector('.cabecera__logo').dataset.grados) };
+    });
+    const arriba = await lee();
+    comprobar(arriba.seccion === 'Inicio' && arriba.indice <= 1 && arriba.marcas === 61 && arriba.secciones.length === 10, 'regla: arriba, en «Inicio», con 61 marcas y 10 secciones → ' + JSON.stringify(arriba));
+    comprobar(arriba.secciones.every((y, i) => i === 0 || y > arriba.secciones[i - 1]), 'regla: las secciones van en orden → ' + arriba.secciones.join(', '));
+    comprobar(Math.abs(arriba.grados - 13) < 0.2, 'logo: arriba del todo la balanza de la cabecera está inclinada 13° → ' + arriba.grados);
+    await page.mouse.move(700, 400);
+    await rueda(page, 6, 700);
+    const medio = await lee();
+    comprobar(medio.grados > 0.5 && medio.grados < 12.5, 'logo: a media página, a medio nivelar → ' + medio.grados);
     await page.keyboard.press('End');
+    await page.waitForTimeout(3200);
+    const abajo = await lee();
+    comprobar(abajo.seccion === 'Contacto' && abajo.indice >= 99 && /Contacto/.test(abajo.rotulo), 'regla: al final, el índice abajo y el rótulo en «Contacto» → ' + JSON.stringify({ s: abajo.seccion, i: abajo.indice, r: abajo.rotulo }));
+    comprobar(Math.abs(abajo.grados) < 0.05, 'logo: al final la balanza de la cabecera queda nivelada → ' + abajo.grados);
+    /* desplegar la regla y usarla para navegar */
+    const caja = await page.locator('#regla').boundingBox();
+    await page.mouse.move(caja.x + caja.width - 16, caja.y + caja.height / 2, { steps: 5 });
+    await page.waitForTimeout(700);
+    const desplegada = await page.evaluate(() => ({ ancho: Math.round(document.getElementById('regla').getBoundingClientRect().width), visibles: [...document.querySelectorAll('.regla__num')].filter(b => parseFloat(getComputedStyle(b).opacity) > 0.5).length }));
+    comprobar(desplegada.ancho >= 270 && desplegada.visibles === 10, 'regla: con el ratón se despliega con las diez secciones → ' + JSON.stringify(desplegada));
+    if (conCapturas) await page.screenshot({ path: foto('12-regla-desplegada.png'), clip: { x: 1440 - 420, y: 0, width: 420, height: 900 } });
+    await page.locator('.regla__num', { hasText: 'Opiniones' }).click();
     await page.waitForTimeout(2600);
-    const abajo = await page.evaluate(() => ({ p: parseFloat(getComputedStyle(document.getElementById('progreso')).getPropertyValue('--p')), encendidas: document.querySelectorAll('.progreso__muesca.puesta').length }));
-    comprobar(abajo.p > 0.98 && abajo.encendidas === 6, 'progreso: al final, lleno y con las seis muescas encendidas → ' + JSON.stringify(abajo));
-    if (conCapturas) await page.screenshot({ path: foto('12-progreso-final.png'), clip: { x: 0, y: 0, width: 260, height: 900 } });
+    const tras = await page.evaluate(() => ({ top: Math.round(document.getElementById('opiniones').getBoundingClientRect().top), seccion: document.getElementById('regla').dataset.seccion }));
+    comprobar(Math.abs(tras.top - 76) <= 12 && tras.seccion === 'Opiniones', 'regla: pulsar «Opiniones» lleva a esa sección → ' + JSON.stringify(tras));
+    await page.mouse.move(600, 450);
+    await page.evaluate(() => { document.getElementById('area-juzgados').scrollIntoView(); return 0; });
 
     const was = await page.evaluate(() => [...document.querySelectorAll('a[href*="wa.me"]')].map(a => { const u = new URL(a.href); return { tel: u.pathname, texto: u.searchParams.get('text') || '' }; }));
     comprobar(was.length >= 9 && was.every(w => w.tel === '/34661010560' && w.texto.startsWith('Hola, José Ángel. Te escribo desde tu web')), 'WhatsApp: todos los enlaces llevan el número y el saludo ya escrito (' + was.length + ')');
@@ -480,6 +504,8 @@ try {
     const enContacto = await barra();
     comprobar(!enHero.visible && enAreas.visible && enAreas.dentro && !enContacto.visible, 'barra móvil: oculta en el hero, fija en las áreas, oculta sobre el contacto → ' + JSON.stringify([enHero, enAreas, enContacto]));
     comprobar(/^(Abierto ahora|Cierra a las 14:30|Abre (hoy|mañana|el lunes) a las 8:30)$/.test(enAreas.llamar), 'barra móvil: el botón de llamar dice si está abierto → ' + enAreas.llamar);
+    const reglaMovil = await page.evaluate(() => { const r = document.getElementById('regla').getBoundingClientRect(); const b = document.getElementById('barra-movil').getBoundingClientRect(); return { ancho: Math.round(r.width), abajo: Math.round(r.bottom), barra: Math.round(b.top), panel: getComputedStyle(document.querySelector('.regla__num')).display }; });
+    comprobar(reglaMovil.ancho <= 32 && reglaMovil.abajo <= reglaMovil.barra && reglaMovil.panel === 'none', 'regla en móvil: estrecha, sin panel y por encima de la barra de contacto → ' + JSON.stringify(reglaMovil));
     await contexto.close();
   }
 

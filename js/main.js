@@ -618,43 +618,103 @@
     zonas.forEach(function (z) { obs.observe(z); });
   })();
 
-  /* ───────────────── progreso: la barra verde del borde se llena al bajar ─────────────────
-     Una muesca por pesa, colocada en el punto del scroll en que su tarjeta se posa
-     (el mismo umbral que usa la balanza pequeña para dejar caer la pesa). */
-  (function progreso() {
-    var caja = document.getElementById('progreso');
-    var relleno = document.getElementById('progreso-relleno');
-    if (!caja || !relleno) return;
+  /* ───────────────── regla de precisión: escala graduada en el borde derecho ─────────────────
+     El índice es el triángulo de su logo y al lado va el nombre de la sección. Cada
+     sección es una marca; las seis áreas caen donde su tarjeta se posa (el mismo
+     umbral con el que cae su pesa en la balanza pequeña). Con el ratón o el foco se
+     despliega y lleva a cualquier sección. */
+  (function regla() {
+    var caja = document.getElementById('regla');
+    var via = document.getElementById('regla-via');
+    var rotulo = document.getElementById('regla-rotulo');
+    if (!caja || !via || !rotulo) return;
+    var indice = via.querySelector('.regla__indice');
     var items = Array.prototype.slice.call(document.querySelectorAll('.pila__item'));
     var lista = document.getElementById('pila');
-    var muescas = items.map(function () {
-      var m = document.createElement('i');
-      m.className = 'progreso__muesca';
-      caja.appendChild(m);
-      return m;
-    });
-    var marcas = [], total = 1, pendiente = false;
+    var ROMANOS = ['I', 'II', 'III', 'IV', 'V', 'VI'];
+    var secciones = [{ num: '', nombre: 'Inicio', el: document.getElementById('inicio') }]
+      .concat(items.map(function (li, i) { return { num: ROMANOS[i], nombre: li.querySelector('h3').textContent.trim(), li: li }; }))
+      .concat([
+        { num: '', nombre: 'Quién soy', el: document.getElementById('quien') },
+        { num: '', nombre: 'Opiniones', el: document.getElementById('opiniones') },
+        { num: '', nombre: 'Contacto', el: document.getElementById('contacto') }
+      ]).filter(function (s) { return s.el || s.li; });
 
+    for (var k = 0; k <= 60; k++) {
+      var t = document.createElement('i');
+      t.className = 'regla__marca' + (k % 5 ? '' : ' regla__marca--media');
+      t.style.top = (k / 60 * 100) + '%';
+      via.appendChild(t);
+    }
+    secciones.forEach(function (s, n) {
+      s.raya = document.createElement('b');
+      s.raya.className = 'regla__seccion';
+      via.appendChild(s.raya);
+      s.boton = document.createElement('button');
+      s.boton.type = 'button';
+      s.boton.className = 'regla__num';
+      s.boton.innerHTML = '<em>' + (s.num || '·') + '</em><span>' + s.nombre + '</span>';
+      s.boton.setAttribute('aria-label', 'Ir a ' + s.nombre);
+      s.boton.addEventListener('click', function () { ir(n); });
+      via.appendChild(s.boton);
+    });
+
+    var total = 1, actual = -1, pendiente = false, aviso;
     function medir() {
       total = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
       var pegada = items.length && getComputedStyle(items[0]).position === 'sticky';
       var umbral = pegada ? tope() + 2 : window.innerHeight * 0.55;
       var y0 = lista ? lista.getBoundingClientRect().top + window.pageYOffset : 0;
       var acumulado = 0;
-      marcas = items.map(function (li) {
-        /* anclado, el rect miente (marca el tope): se suma la posición natural */
-        var arriba = pegada ? y0 + acumulado : li.getBoundingClientRect().top + window.pageYOffset;
-        acumulado += li.offsetHeight + parseFloat(getComputedStyle(li).marginBottom || 0);
-        return Math.max(0, Math.min(1, (arriba - umbral) / total));
+      secciones.forEach(function (s) {
+        var y;
+        if (s.li) {
+          /* anclada, la tarjeta miente en su rect (marca el tope): se suma la posición natural */
+          y = (pegada ? y0 + acumulado : s.li.getBoundingClientRect().top + window.pageYOffset) - umbral;
+          acumulado += s.li.offsetHeight + parseFloat(getComputedStyle(s.li).marginBottom || 0);
+        } else {
+          y = s.el.getBoundingClientRect().top + window.pageYOffset - alturaCabecera();
+        }
+        s.y = Math.max(0, Math.min(total, y));
+        var f = (s.y / total * 100).toFixed(3) + '%';
+        s.raya.style.top = f;
+        s.boton.style.top = f;
       });
-      muescas.forEach(function (m, i) { m.style.setProperty('--en', marcas[i].toFixed(4)); });
+      actual = -1;
       pintar();
+    }
+    function revelar(texto) {
+      rotulo.textContent = '';
+      texto.split('').forEach(function (c, i) {
+        var l = document.createElement('span');
+        l.textContent = c === ' ' ? '\u00a0' : c;
+        if (!reduce) l.style.animationDelay = (i * 18) + 'ms';
+        rotulo.appendChild(l);
+      });
     }
     function pintar() {
       pendiente = false;
-      var p = Math.max(0, Math.min(1, window.pageYOffset / total));
-      caja.style.setProperty('--p', p.toFixed(4));
-      muescas.forEach(function (m, i) { m.classList.toggle('puesta', p >= marcas[i] - 2 / total); });
+      var y = window.pageYOffset, p = Math.max(0, Math.min(1, y / total));
+      indice.style.top = (p * 100).toFixed(3) + '%';
+      rotulo.style.top = (p * 100).toFixed(3) + '%';
+      var n = 0;
+      secciones.forEach(function (s, i) { if (y >= s.y - 3) n = i; });
+      if (n === actual) return;
+      var primera = actual === -1;
+      actual = n;
+      secciones.forEach(function (s, i) { s.boton.classList.toggle('activo', i === n); });
+      revelar((secciones[n].num ? secciones[n].num + ' · ' : '') + secciones[n].nombre);
+      caja.dataset.seccion = secciones[n].nombre;
+      if (primera) return;
+      /* en táctil no hay hover: el rótulo asoma un momento al cambiar de sección */
+      caja.classList.add('regla--aviso');
+      clearTimeout(aviso);
+      aviso = setTimeout(function () { caja.classList.remove('regla--aviso'); }, 1800);
+    }
+    function ir(n) {
+      var destino = secciones[n].y + (secciones[n].li ? 4 : 1);
+      if (lenis) lenis.scrollTo(destino, { duration: 1.4 });
+      else window.scrollTo(0, destino);
     }
     function alBajar() { if (!pendiente) { pendiente = true; requestAnimationFrame(pintar); } }
 
@@ -667,6 +727,52 @@
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(medir);
     window.addEventListener('load', medir);
     medir();
+  })();
+
+  /* ───────────────── el logo de la cabecera se nivela a lo largo de la página ─────────────────
+     Arriba del todo está inclinado 13°, como la balanza del hero; al llegar al pie,
+     a 0°. El brazo sigue al scroll con un muelle amortiguado (se pasa y vuelve), y
+     el bucle se para cuando se asienta. Los platillos cuelgan a plomo de los extremos. */
+  (function logoCabecera() {
+    var svg = document.querySelector('.cabecera__logo');
+    var cruz = svg && svg.querySelector('.lc-cruz');
+    if (!cruz) return;
+    var platos = svg.querySelectorAll('.lc-plato');
+    var PIVOTE = [710, 61], GANCHOS_LOGO = [[-83, 11], [82, 11]], AMPLITUD = 13;
+    var ang = 0, vel = 0, ultimo = 0, corriendo = false;
+
+    function objetivo() {
+      var total = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+      return AMPLITUD * (1 - Math.max(0, Math.min(1, window.pageYOffset / total)));
+    }
+    function colocarLogo(g) {
+      cruz.setAttribute('transform', 'rotate(' + g.toFixed(3) + ' ' + PIVOTE[0] + ' ' + PIVOTE[1] + ')');
+      var r = g * Math.PI / 180, c = Math.cos(r), s = Math.sin(r);
+      GANCHOS_LOGO.forEach(function (d, i) {
+        platos[i].setAttribute('transform', 'translate(' + (PIVOTE[0] + d[0] * c - d[1] * s).toFixed(2) + ' ' + (PIVOTE[1] + d[0] * s + d[1] * c).toFixed(2) + ')');
+      });
+      svg.dataset.grados = g.toFixed(2);
+    }
+    function paso(ahora) {
+      var dt = Math.min(0.033, (ahora - ultimo) / 1000 || 0.016);
+      ultimo = ahora;
+      var meta = objetivo();
+      vel += (-30 * (ang - meta) - 5.5 * vel) * dt;
+      ang += vel * dt;
+      if (Math.abs(ang - meta) < 0.01 && Math.abs(vel) < 0.01) { ang = meta; colocarLogo(ang); corriendo = false; return; }
+      colocarLogo(ang);
+      requestAnimationFrame(paso);
+    }
+    function despertar() {
+      if (!movimiento) { ang = objetivo(); colocarLogo(ang); return; }     /* sin viaje: el dato, sin muelle */
+      if (!corriendo) { corriendo = true; ultimo = performance.now(); requestAnimationFrame(paso); }
+    }
+    ang = objetivo();
+    colocarLogo(ang);
+    window.addEventListener('scroll', despertar, { passive: true });
+    if (lenis) lenis.on('scroll', despertar);
+    window.addEventListener('resize', despertar);
+    if (window.ScrollTrigger) window.ScrollTrigger.addEventListener('refresh', despertar);
   })();
 
   /* ───────────────── mapa solo bajo clic ───────────────── */
