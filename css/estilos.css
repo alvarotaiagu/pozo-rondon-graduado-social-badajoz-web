@@ -929,3 +929,8 @@ html.con-cursor, html.con-cursor * { cursor: none !important; }
 .legal th, .legal td { text-align: left; padding: .7rem .6rem; border-bottom: 1px solid rgba(30, 92, 63, .2); vertical-align: top; }
 .legal th { font-weight: 600; color: var(--verde); font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; }
 .legal code { font-size: .88em; color: var(--tinta); }
+
+/* redes */
+.quien__redes { margin: 0; font-size: .92rem; color: var(--tinta-suave); }
+.quien__redes a { color: var(--verde); font-weight: 600; text-underline-offset: 3px; }
+.pie__redes { margin-top: 1rem !important; }
