@@ -34,7 +34,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gelasio:ital,wght@0,500;0,700;1,500&family=Albert+Sans:ital,wght@0,400;0,500;0,600;0,700;1,500&display=swap">
-<link rel="stylesheet" href="css/estilos.css?v=1c7cc502">
+<link rel="stylesheet" href="css/estilos.css?v=544b6899">
 <script>
 /* Bloqueante a propósito: la densidad se resuelve antes del primer pintado.
    [MANDO DE MAQUETA] — la parte de la densidad es eliminable, ver README. */
@@ -143,7 +143,7 @@
     <a href="#contacto">Contacto</a>
     <a class="cabecera__llamar-movil" href="tel:+34661010560">Llamar · 661 01 05 60</a>
   </nav>
-  <a class="boton boton--linea cabecera__llamar iman" href="tel:+34661010560"><span>661 01 05 60</span></a>
+  <a class="boton boton--linea cabecera__llamar iman" href="tel:+34661010560" data-estado-titulo><span><i class="estado-punto" data-estado-punto aria-hidden="true"></i>661 01 05 60</span></a>
   <button class="hamburguesa" id="hamburguesa" type="button" aria-expanded="false" aria-controls="menu">
     <span class="visualmente-oculto">Abrir menú</span>
     <span class="hamburguesa__linea"></span>
@@ -161,7 +161,7 @@
       <p class="hero__entrada">Soy José Ángel Pozo Rondón y llevo un despacho jurídico-laboral para empresas, profesionales y particulares. Reviso contratos, nóminas y jornadas antes de que llegue la sanción o la demanda. Y si llega, te represento ante el Juzgado de lo Social.</p>
       <div class="hero__acciones">
         <a class="boton iman" href="tel:+34661010560"><span>Llamar al 661 01 05 60</span></a>
-        <a class="enlace" href="https://wa.me/34661010560" target="_blank" rel="noopener">Escríbeme por WhatsApp</a>
+        <a class="enlace" href="https://wa.me/34661010560?text=Hola%2C%20Jos%C3%A9%20%C3%81ngel.%20Te%20escribo%20desde%20tu%20web%3A%20" target="_blank" rel="noopener">Escríbeme por WhatsApp</a>
       </div>
       <p class="hero__nota"><span class="estrellas" aria-hidden="true">★★★★★</span> 5,0 en Google <span class="hero__nota-sep" aria-hidden="true">·</span> Colegiado n.º 493</p>
     </div>
@@ -364,7 +364,7 @@
                 <li>Reestructuraciones</li>
                 <li>Jornada y registro horario</li>
               </ul>
-              <a class="enlace" href="tel:+34661010560">Consultar lo laboral · 661 01 05 60</a>
+              <p class="tarjeta__acciones"><a class="enlace" href="https://wa.me/34661010560?text=Hola%2C%20Jos%C3%A9%20%C3%81ngel.%20Te%20escribo%20desde%20tu%20web%20por%20un%20tema%20laboral%20(contrato%2C%20despido%E2%80%A6)%3A%20" target="_blank" rel="noopener">Preguntar lo laboral por WhatsApp</a><a class="tarjeta__tel" href="tel:+34661010560">o llama al 661 01 05 60</a></p>
             </div>
           </article>
         </li>
@@ -394,7 +394,7 @@
                 <li>Incapacidad temporal y permanente</li>
                 <li>Prestaciones y reclamaciones</li>
               </ul>
-              <a class="enlace" href="tel:+34661010560">Consultar Seguridad Social · 661 01 05 60</a>
+              <p class="tarjeta__acciones"><a class="enlace" href="https://wa.me/34661010560?text=Hola%2C%20Jos%C3%A9%20%C3%81ngel.%20Te%20escribo%20desde%20tu%20web%20por%20un%20tema%20de%20Seguridad%20Social%20(n%C3%B3minas%2C%20incapacidad%2C%20prestaci%C3%B3n%E2%80%A6)%3A%20" target="_blank" rel="noopener">Preguntar por WhatsApp</a><a class="tarjeta__tel" href="tel:+34661010560">o llama al 661 01 05 60</a></p>
             </div>
           </article>
         </li>
@@ -424,7 +424,7 @@
                 <li>Profesionales altamente cualificados</li>
                 <li>Contratar a personal extranjero</li>
               </ul>
-              <a class="enlace" href="https://wa.me/34661010560" target="_blank" rel="noopener">Consultar extranjería por WhatsApp</a>
+              <p class="tarjeta__acciones"><a class="enlace" href="https://wa.me/34661010560?text=Hola%2C%20Jos%C3%A9%20%C3%81ngel.%20Te%20escribo%20desde%20tu%20web%20por%20extranjer%C3%ADa%20(permiso%20de%20residencia%20y%20trabajo%2C%20renovaci%C3%B3n%E2%80%A6)%3A%20" target="_blank" rel="noopener">Preguntar extranjería por WhatsApp</a><a class="tarjeta__tel" href="tel:+34661010560">o llama al 661 01 05 60</a></p>
             </div>
           </article>
         </li>
@@ -454,7 +454,7 @@
                 <li>Sanciones</li>
                 <li>Demandas de Seguridad Social</li>
               </ul>
-              <a class="enlace" href="tel:+34661010560">Consultar un caso · 661 01 05 60</a>
+              <p class="tarjeta__acciones"><a class="enlace" href="https://wa.me/34661010560?text=Hola%2C%20Jos%C3%A9%20%C3%81ngel.%20Te%20escribo%20desde%20tu%20web%20por%20un%20caso%20que%20puede%20acabar%20en%20el%20Juzgado%20de%20lo%20Social%3A%20" target="_blank" rel="noopener">Contar el caso por WhatsApp</a><a class="tarjeta__tel" href="tel:+34661010560">o llama al 661 01 05 60</a></p>
             </div>
           </article>
         </li>
@@ -484,7 +484,7 @@
                 <li>Cotización y convenio</li>
                 <li>Requerimientos de la Inspección</li>
               </ul>
-              <a class="enlace" href="tel:+34661010560">Pedir una revisión · 661 01 05 60</a>
+              <p class="tarjeta__acciones"><a class="enlace" href="https://wa.me/34661010560?text=Hola%2C%20Jos%C3%A9%20%C3%81ngel.%20Te%20escribo%20desde%20tu%20web%20porque%20me%20interesa%20una%20revisi%C3%B3n%20laboral%20preventiva%20de%20mi%20empresa%3A%20" target="_blank" rel="noopener">Pedir la revisión por WhatsApp</a><a class="tarjeta__tel" href="tel:+34661010560">o llama al 661 01 05 60</a></p>
             </div>
           </article>
         </li>
@@ -514,7 +514,7 @@
                 <li>Consultas técnicas</li>
                 <li>Apoyo en inspecciones</li>
               </ul>
-              <a class="enlace" href="mailto:despacho@pozorondon.es">Escribir a despacho@pozorondon.es</a>
+              <p class="tarjeta__acciones"><a class="enlace" href="https://wa.me/34661010560?text=Hola%2C%20Jos%C3%A9%20%C3%81ngel.%20Te%20escribo%20desde%20tu%20web%20desde%20una%20asesor%C3%ADa%20o%20despacho%3A%20me%20interesa%20externalizar%20el%20%C3%A1rea%20laboral.%20" target="_blank" rel="noopener">Hablarlo por WhatsApp</a><a class="tarjeta__tel" href="mailto:despacho@pozorondon.es">o escribe a despacho@pozorondon.es</a></p>
             </div>
           </article>
         </li>
@@ -620,7 +620,7 @@
         </div>
         <div class="datos__fila">
           <dt>Horario</dt>
-          <dd>Lunes a viernes, de 8:30 a 14:30, con cita previa</dd>
+          <dd>Lunes a viernes, de 8:30 a 14:30, con cita previa<span class="estado" data-estado hidden><i class="estado-punto" data-estado-punto aria-hidden="true"></i><span data-estado-texto></span></span></dd>
         </div>
         <div class="datos__fila">
           <dt>Despacho</dt>
@@ -632,7 +632,7 @@
         </div>
         <div class="datos__acciones">
           <a class="boton iman" href="tel:+34661010560"><span>Llamar ahora</span></a>
-          <a class="boton boton--linea iman" href="https://wa.me/34661010560" target="_blank" rel="noopener"><span>WhatsApp</span></a>
+          <a class="boton boton--linea iman" href="https://wa.me/34661010560?text=Hola%2C%20Jos%C3%A9%20%C3%81ngel.%20Te%20escribo%20desde%20tu%20web%3A%20" target="_blank" rel="noopener"><span>WhatsApp</span></a>
           <a class="enlace" href="https://www.google.com/maps/search/?api=1&amp;query=Avenida+Sinforiano+Madro%C3%B1ero+10+06011+Badajoz" target="_blank" rel="noopener">Cómo llegar (abre Google Maps)</a>
         </div>
       </dl>
@@ -663,7 +663,7 @@
   <div class="pie__columna">
     <h2>Contacto</h2>
     <p><a href="tel:+34661010560">661 01 05 60</a></p>
-    <p><a href="https://wa.me/34661010560" target="_blank" rel="noopener">WhatsApp</a></p>
+    <p><a href="https://wa.me/34661010560?text=Hola%2C%20Jos%C3%A9%20%C3%81ngel.%20Te%20escribo%20desde%20tu%20web%3A%20" target="_blank" rel="noopener">WhatsApp</a></p>
     <p><a href="mailto:despacho@pozorondon.es">despacho@pozorondon.es</a></p>
   </div>
   <div class="pie__columna">
@@ -679,6 +679,17 @@
     <p class="pie__creditos">Maqueta de presentación. Balanza y pesas dibujadas para esta web a partir de su logo. Tipografías Gelasio y Albert Sans (licencia OFL).</p>
   </div>
 </footer>
+
+<!-- ═══════════ Barra de contacto fija (solo móvil): aparece fuera del hero y se va sobre el contacto ═══════════ -->
+<nav class="barra-movil" id="barra-movil" aria-label="Contacto rápido">
+  <a class="barra-movil__llamar" href="tel:+34661010560"><span>Llamar</span><small data-estado-corto></small></a>
+  <a class="barra-movil__wa" href="https://wa.me/34661010560?text=Hola%2C%20Jos%C3%A9%20%C3%81ngel.%20Te%20escribo%20desde%20tu%20web%3A%20" target="_blank" rel="noopener">WhatsApp</a>
+</nav>
+
+<!-- ═══════════ Progreso: la barra verde de su marca se llena al bajar; una muesca por pesa ═══════════ -->
+<div class="progreso" id="progreso" aria-hidden="true">
+  <span class="progreso__relleno" id="progreso-relleno"></span>
+</div>
 
 <!-- ═══════════ Aviso de cookies ═══════════ -->
 <div class="cookies" id="cookies" hidden>
@@ -730,6 +741,6 @@
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js" defer></script>
-<script src="js/main.js?v=35851e09" defer></script>
+<script src="js/main.js?v=fae33102" defer></script>
 </body>
 </html>

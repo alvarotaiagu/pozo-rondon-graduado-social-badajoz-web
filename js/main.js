@@ -554,6 +554,121 @@
   }
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') cerrarMenu(); });
 
+  /* ───────────────── estado del despacho: L–V 8:30–14:30, hora de Madrid ─────────────────
+     Se calcula con la hora de Madrid aunque quien mira esté en otro huso (extranjería
+     atiende a toda España y fuera). Los festivos no se contemplan: ver README. */
+  (function estadoDespacho() {
+    var APERTURA = 8 * 60 + 30, CIERRE = 14 * 60 + 30;
+    var DIAS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    var formato = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/Madrid', weekday: 'short', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
+    function ahora() {
+      var d = {};
+      formato.formatToParts(new Date()).forEach(function (p) { d[p.type] = p.value; });
+      return { dia: DIAS.indexOf(d.weekday), min: (parseInt(d.hour, 10) % 24) * 60 + parseInt(d.minute, 10) };
+    }
+    function calcular() {
+      var a = ahora(), laborable = a.dia >= 1 && a.dia <= 5;
+      if (laborable && a.min >= APERTURA && a.min < CIERRE) {
+        var pronto = CIERRE - a.min <= 30;
+        return { abierto: true,
+          texto: pronto ? 'Abierto · cierra pronto, a las 14:30' : 'Abierto ahora · hasta las 14:30',
+          corto: pronto ? 'Cierra a las 14:30' : 'Abierto ahora' };
+      }
+      /* domingo o L–J por la tarde: mañana; viernes por la tarde y sábado: el lunes */
+      var cuando = laborable && a.min < APERTURA ? 'hoy' : (a.dia === 0 || (a.dia >= 1 && a.dia <= 4)) ? 'mañana' : 'el lunes';
+      return { abierto: false, texto: 'Cerrado ahora · abre ' + cuando + ' a las 8:30', corto: 'Abre ' + cuando + ' a las 8:30' };
+    }
+    function pintar() {
+      var e = calcular();
+      Array.prototype.forEach.call(document.querySelectorAll('[data-estado-punto]'), function (p) {
+        p.classList.toggle('abierto', e.abierto);
+        p.classList.toggle('cerrado', !e.abierto);
+      });
+      Array.prototype.forEach.call(document.querySelectorAll('[data-estado-texto]'), function (t) { t.textContent = e.texto; });
+      Array.prototype.forEach.call(document.querySelectorAll('[data-estado-corto]'), function (t) { t.textContent = e.corto; });
+      Array.prototype.forEach.call(document.querySelectorAll('[data-estado]'), function (c) { c.hidden = false; });
+      Array.prototype.forEach.call(document.querySelectorAll('[data-estado-titulo]'), function (a) {
+        a.setAttribute('aria-label', 'Llamar al 661 01 05 60 · ' + e.texto);
+        a.title = e.texto;
+      });
+    }
+    pintar();
+    setInterval(pintar, 60000);
+  })();
+
+  /* ───────────────── barra de contacto fija en móvil ─────────────────
+     Solo fuera del hero (ahí ya están los botones) y antes del contacto y el pie
+     (ahí también). El CSS la limita a pantallas de 900 px o menos. */
+  (function barraMovil() {
+    var barra = document.getElementById('barra-movil');
+    if (!barra) return;
+    var zonas = [document.getElementById('inicio'), document.getElementById('contacto'), document.querySelector('.pie')].filter(Boolean);
+    if (!('IntersectionObserver' in window)) { barra.classList.add('visible'); return; }
+    var dentro = [];
+    var obs = new IntersectionObserver(function (entradas) {
+      entradas.forEach(function (en) {
+        var i = dentro.indexOf(en.target);
+        if (en.isIntersecting && i < 0) dentro.push(en.target);
+        if (!en.isIntersecting && i >= 0) dentro.splice(i, 1);
+      });
+      var ver = dentro.length === 0;
+      barra.classList.toggle('visible', ver);
+      html.classList.toggle('barra-activa', ver && window.matchMedia('(max-width: 900px)').matches);
+    }, { threshold: 0 });
+    zonas.forEach(function (z) { obs.observe(z); });
+  })();
+
+  /* ───────────────── progreso: la barra verde del borde se llena al bajar ─────────────────
+     Una muesca por pesa, colocada en el punto del scroll en que su tarjeta se posa
+     (el mismo umbral que usa la balanza pequeña para dejar caer la pesa). */
+  (function progreso() {
+    var caja = document.getElementById('progreso');
+    var relleno = document.getElementById('progreso-relleno');
+    if (!caja || !relleno) return;
+    var items = Array.prototype.slice.call(document.querySelectorAll('.pila__item'));
+    var lista = document.getElementById('pila');
+    var muescas = items.map(function () {
+      var m = document.createElement('i');
+      m.className = 'progreso__muesca';
+      caja.appendChild(m);
+      return m;
+    });
+    var marcas = [], total = 1, pendiente = false;
+
+    function medir() {
+      total = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+      var pegada = items.length && getComputedStyle(items[0]).position === 'sticky';
+      var umbral = pegada ? tope() + 2 : window.innerHeight * 0.55;
+      var y0 = lista ? lista.getBoundingClientRect().top + window.pageYOffset : 0;
+      var acumulado = 0;
+      marcas = items.map(function (li) {
+        /* anclado, el rect miente (marca el tope): se suma la posición natural */
+        var arriba = pegada ? y0 + acumulado : li.getBoundingClientRect().top + window.pageYOffset;
+        acumulado += li.offsetHeight + parseFloat(getComputedStyle(li).marginBottom || 0);
+        return Math.max(0, Math.min(1, (arriba - umbral) / total));
+      });
+      muescas.forEach(function (m, i) { m.style.setProperty('--en', marcas[i].toFixed(4)); });
+      pintar();
+    }
+    function pintar() {
+      pendiente = false;
+      var p = Math.max(0, Math.min(1, window.pageYOffset / total));
+      caja.style.setProperty('--p', p.toFixed(4));
+      muescas.forEach(function (m, i) { m.classList.toggle('puesta', p >= marcas[i] - 2 / total); });
+    }
+    function alBajar() { if (!pendiente) { pendiente = true; requestAnimationFrame(pintar); } }
+
+    window.addEventListener('scroll', alBajar, { passive: true });
+    if (lenis) lenis.on('scroll', alBajar);
+    window.addEventListener('resize', function () { setTimeout(medir, 260); });
+    document.addEventListener('cortina-retirada', function () { setTimeout(medir, 60); });
+    document.addEventListener('densidad-cambiada', function () { setTimeout(medir, 120); });
+    if (window.ScrollTrigger) window.ScrollTrigger.addEventListener('refresh', medir);   /* el pin del hero cambia el alto */
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(medir);
+    window.addEventListener('load', medir);
+    medir();
+  })();
+
   /* ───────────────── mapa solo bajo clic ───────────────── */
   (function mapa() {
     var btn = document.getElementById('mapa-boton');

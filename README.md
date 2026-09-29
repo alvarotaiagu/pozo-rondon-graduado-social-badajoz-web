@@ -19,6 +19,10 @@ Está hecha a partir de `enrique-botejara-asesor-badajoz-web`, otro asesor de Ba
 - **Quién soy:** su retrato, el colegiado n.º 493 y una frase suya de @mentelaboralista.
 - **Opiniones:** las tres reseñas reales de Google, con nombre e inicial (nunca el nombre completo), y el 5,0 ★ **sin recuento de reseñas**. Una de ellas va en inglés, con su traducción debajo.
 - **Contacto:** teléfono y WhatsApp, correo, horario, dirección y mapa bajo clic.
+- **Progreso:** la barra verde vertical de su portada de Facebook está fija en el borde izquierdo y se llena al bajar. Tiene una muesca por pesa, que se enciende a la vez que cae su pesa en la balanza pequeña.
+- **WhatsApp con el mensaje escrito:** cada área abre WhatsApp con su propio texto («Hola, José Ángel. Te escribo desde tu web por extranjería…»). Los demás enlaces llevan un saludo general.
+- **Abierto / cerrado:** se calcula con la hora de Madrid (L–V 8:30–14:30), aunque quien mire esté en otro huso. Sale como punto en el botón de la cabecera, como línea en el horario de contacto y en la barra de móvil. **No tiene en cuenta festivos ni las vacaciones de agosto**; si le importa, se añade una lista de cierres.
+- **Barra fija en móvil** con «Llamar» (dice si está abierto) y «WhatsApp». Aparece fuera del hero y se esconde sobre el contacto, el pie, el menú y el aviso de cookies.
 
 **Paleta:** papel `#F7F6F1` y el verde de su logo, `#1E5C3F`, muestreado de su cabecera de Facebook. Para las secciones oscuras, verde hondo `#133D2A`; para el acento sobre oscuro, `#9BD3B4`. Hay una barra verde vertical en el borde del hero y de las tarjetas, igual que en su portada de Facebook. Los contrastes están calculados en `scripts/contraste.mjs` y todos pasan.
 
@@ -56,7 +60,7 @@ Los datos completos, con su fuente, están en `../pozo-rondon-graduado-social-ba
 
 ```
 node scripts/servir.mjs              # http://127.0.0.1:4192
-node scripts/verificar.mjs           # 76 comprobaciones con Playwright
+node scripts/verificar.mjs           # 93 comprobaciones con Playwright
 node scripts/verificar.mjs --capturas
 node scripts/contraste.mjs
 ```

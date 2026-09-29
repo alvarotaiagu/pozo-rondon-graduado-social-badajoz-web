@@ -187,10 +187,12 @@ try {
     const IDS = ['#area-laboral', '#area-seguridad-social', '#area-extranjeria', '#area-juzgados', '#area-auditoria', '#area-despachos'];
     const ESPERADO = ['Cae a la izquierda', 'Cae a la derecha', 'Cae a la izquierda', 'Cae a la izquierda', 'Cae a la izquierda', 'En equilibrio'];
     const pasos = [];
+    const muescasEncendidas = [];
     for (let i = 0; i < IDS.length; i++) {
       await hasta(page, IDS[i], 20);
       await page.waitForTimeout(i === IDS.length - 1 ? 2600 : 900);
       pasos.push(await mini(page));
+      muescasEncendidas.push(await page.evaluate(() => document.querySelectorAll('.progreso__muesca.puesta').length));
       if (conCapturas) await page.screenshot({ path: foto('05-area-' + (i + 1) + '.png') });
       if (i === 1) {
         const apilada = await page.evaluate(() => getComputedStyle(document.querySelector('#area-laboral .tarjeta')).transform);
@@ -199,6 +201,7 @@ try {
     }
     comprobar(m0.puestas === 0 && pasos.slice(0, 5).every((p, i) => p.puestas === i + 1 && p.estado === ESPERADO[i]),
       'cada tarjeta que se posa deja caer su pesa y la balanza cabecea → ' + JSON.stringify([m0].concat(pasos.slice(0, 5)).map(p => p.puestas + ' ' + p.estado)));
+    comprobar(muescasEncendidas.every((n, i) => n === pasos[i].puestas), 'progreso: cada muesca del borde se enciende a la vez que cae su pesa → ' + JSON.stringify(muescasEncendidas));
     const m6 = pasos[5];
     comprobar(m6.puestas === 6 && m6.estado === 'En equilibrio' && m6.grados === '0,0°', 'solo con las seis pesas la balanza pequeña se equilibra → ' + JSON.stringify(m6));
 
@@ -415,6 +418,68 @@ try {
       await page.screenshot({ path: foto('37-movil-pie.png') });
     }
     comprobar(errores.length === 0, 'móvil: consola sin errores' + (errores.length ? ' → ' + errores.join(' | ') : ''));
+    await contexto.close();
+  }
+
+  /* ───── 3c. mejoras: progreso, WhatsApp con mensaje, estado del despacho, barra móvil ───── */
+  {
+    const { contexto, page, errores } = await nuevaPagina(navegador);
+    await contexto.addInitScript(() => { try { localStorage.setItem('pozorondon-cookies', 'ok'); } catch (e) {} });
+    await page.goto(base + '/index.html', { waitUntil: 'networkidle' });
+    await page.waitForTimeout(4800);
+    const arriba = await page.evaluate(() => ({ p: parseFloat(getComputedStyle(document.getElementById('progreso')).getPropertyValue('--p')), muescas: document.querySelectorAll('.progreso__muesca').length, encendidas: document.querySelectorAll('.progreso__muesca.puesta').length, marcas: [...document.querySelectorAll('.progreso__muesca')].map(m => parseFloat(m.style.getPropertyValue('--en'))) }));
+    comprobar(arriba.p < 0.02 && arriba.muescas === 6 && arriba.encendidas === 0, 'progreso: arriba del todo, vacío y con seis muescas apagadas → ' + JSON.stringify(arriba));
+    comprobar(arriba.marcas.every((m, i) => m > 0.05 && m < 0.95 && (i === 0 || m > arriba.marcas[i - 1])), 'progreso: las muescas van en orden y dentro de la página → ' + JSON.stringify(arriba.marcas));
+    await page.keyboard.press('End');
+    await page.waitForTimeout(2600);
+    const abajo = await page.evaluate(() => ({ p: parseFloat(getComputedStyle(document.getElementById('progreso')).getPropertyValue('--p')), encendidas: document.querySelectorAll('.progreso__muesca.puesta').length }));
+    comprobar(abajo.p > 0.98 && abajo.encendidas === 6, 'progreso: al final, lleno y con las seis muescas encendidas → ' + JSON.stringify(abajo));
+    if (conCapturas) await page.screenshot({ path: foto('12-progreso-final.png'), clip: { x: 0, y: 0, width: 260, height: 900 } });
+
+    const was = await page.evaluate(() => [...document.querySelectorAll('a[href*="wa.me"]')].map(a => { const u = new URL(a.href); return { tel: u.pathname, texto: u.searchParams.get('text') || '' }; }));
+    comprobar(was.length >= 9 && was.every(w => w.tel === '/34661010560' && w.texto.startsWith('Hola, José Ángel. Te escribo desde tu web')), 'WhatsApp: todos los enlaces llevan el número y el saludo ya escrito (' + was.length + ')');
+    const porArea = await page.evaluate(() => [...document.querySelectorAll('.tarjeta__acciones a[href*="wa.me"]')].map(a => new URL(a.href).searchParams.get('text')));
+    comprobar(porArea.length === 6 && new Set(porArea).size === 6, 'WhatsApp: cada área escribe su propio mensaje → ' + porArea.map(t => t.slice(42, 72)).join(' | '));
+    const escritorio = await page.evaluate(() => getComputedStyle(document.getElementById('barra-movil')).display);
+    comprobar(escritorio === 'none', 'barra móvil: no existe en escritorio → ' + escritorio);
+    comprobar(errores.length === 0, 'mejoras: consola sin errores' + (errores.length ? ' → ' + errores.join(' | ') : ''));
+    await contexto.close();
+  }
+  /* estado del despacho a distintas horas de Madrid (septiembre-octubre de 2026: UTC+2) */
+  for (const [iso, esperado] of [
+    ['2026-09-30T08:00:00Z', 'Abierto ahora · hasta las 14:30'],       // miércoles 10:00
+    ['2026-09-30T12:10:00Z', 'Abierto · cierra pronto, a las 14:30'],   // miércoles 14:10
+    ['2026-09-30T14:00:00Z', 'Cerrado ahora · abre mañana a las 8:30'], // miércoles 16:00
+    ['2026-10-02T13:00:00Z', 'Cerrado ahora · abre el lunes a las 8:30'], // viernes 15:00
+    ['2026-10-03T09:00:00Z', 'Cerrado ahora · abre el lunes a las 8:30'], // sábado 11:00
+    ['2026-10-04T09:00:00Z', 'Cerrado ahora · abre mañana a las 8:30'], // domingo 11:00
+    ['2026-10-05T05:00:00Z', 'Cerrado ahora · abre hoy a las 8:30']     // lunes 7:00
+  ]) {
+    const { contexto, page } = await nuevaPagina(navegador, { reducedMotion: 'reduce' });
+    await page.clock.setFixedTime(new Date(iso));
+    await page.goto(base + '/index.html', { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(500);
+    const e = await page.evaluate(() => ({ texto: document.querySelector('[data-estado-texto]').textContent, punto: document.querySelector('.cabecera [data-estado-punto]').className, visible: !document.querySelector('[data-estado]').hidden, etiqueta: document.querySelector('.cabecera__llamar').getAttribute('aria-label') }));
+    const abierto = esperado.startsWith('Abierto');
+    comprobar(e.texto === esperado && e.visible && e.punto.includes(abierto ? 'abierto' : 'cerrado') && e.etiqueta.includes(esperado), 'estado ' + iso + ' → «' + e.texto + '» (' + e.punto + ')');
+    await contexto.close();
+  }
+  /* barra fija en móvil: fuera del hero sí, en el hero y sobre el contacto no */
+  {
+    const { contexto, page } = await nuevaPagina(navegador, { viewport: { width: 390, height: 844 } });
+    await contexto.addInitScript(() => { try { localStorage.setItem('pozorondon-cookies', 'ok'); } catch (e) {} });
+    await page.goto(base + '/index.html', { waitUntil: 'networkidle' });
+    await page.waitForTimeout(4800);
+    const barra = () => page.evaluate(() => { const b = document.getElementById('barra-movil'); const r = b.getBoundingClientRect(); return { visible: b.classList.contains('visible') && getComputedStyle(b).visibility === 'visible', dentro: r.bottom <= window.innerHeight + 1 && r.top < window.innerHeight, llamar: b.querySelector('small').textContent }; });
+    const enHero = await barra();
+    await hasta(page, '#area-seguridad-social');
+    const enAreas = await barra();
+    if (conCapturas) await page.screenshot({ path: foto('38-movil-barra.png') });
+    await hasta(page, '#contacto');
+    await page.waitForTimeout(700);
+    const enContacto = await barra();
+    comprobar(!enHero.visible && enAreas.visible && enAreas.dentro && !enContacto.visible, 'barra móvil: oculta en el hero, fija en las áreas, oculta sobre el contacto → ' + JSON.stringify([enHero, enAreas, enContacto]));
+    comprobar(/^(Abierto ahora|Cierra a las 14:30|Abre (hoy|mañana|el lunes) a las 8:30)$/.test(enAreas.llamar), 'barra móvil: el botón de llamar dice si está abierto → ' + enAreas.llamar);
     await contexto.close();
   }
 
