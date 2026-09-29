@@ -19,7 +19,7 @@ Está hecha a partir de `enrique-botejara-asesor-badajoz-web`, otro asesor de Ba
 - **Quién soy:** su retrato, el colegiado n.º 493 y una frase suya de @mentelaboralista.
 - **Opiniones:** las tres reseñas reales de Google, con nombre e inicial (nunca el nombre completo), y el 5,0 ★ **sin recuento de reseñas**. Una de ellas va en inglés, con su traducción debajo.
 - **Contacto:** teléfono y WhatsApp, correo, horario, dirección y mapa bajo clic.
-- **Regla de precisión** en el borde derecho: una escala graduada con el triángulo de su logo como índice y el nombre de la sección entrando letra a letra. Cada una de las 10 secciones tiene una raya; las seis áreas caen donde su tarjeta se posa, a la vez que su pesa. Con el ratón se despliega y lleva a cualquier sección. En móvil es más estrecha, no tiene panel y el rótulo asoma un momento al cambiar de sección.
+- **Regla de precisión** en el borde derecho: una escala graduada con el triángulo de su logo como índice y el nombre de la sección entrando letra a letra. Cada una de las 11 secciones tiene una raya, y pasa a ser la actual cuando su borde de arriba cruza el 45 % de la pantalla, no cuando toca la cabecera. Al pulsar, lleva al principio de la sección. Con el ratón se despliega y lleva a cualquier sección. En móvil es más estrecha, no tiene panel y el rótulo asoma un momento al cambiar de sección.
 - **El logo de la cabecera se nivela:** está inclinado 13° arriba del todo, como la balanza del hero, y llega a 0° al final de la página, con un muelle amortiguado.
 - **WhatsApp con el mensaje escrito:** cada área abre WhatsApp con su propio texto («Hola, José Ángel. Te escribo desde tu web por extranjería…»). Los demás enlaces llevan un saludo general.
 - **Abierto / cerrado:** se calcula con la hora de Madrid (L–V 8:30–14:30), aunque quien mire esté en otro huso. Sale como punto en el botón de la cabecera, como línea en el horario de contacto y en la barra de móvil. **No tiene en cuenta festivos ni las vacaciones de agosto**; si le importa, se añade una lista de cierres.
@@ -61,7 +61,7 @@ Los datos completos, con su fuente, están en `../pozo-rondon-graduado-social-ba
 
 ```
 node scripts/servir.mjs              # http://127.0.0.1:4192
-node scripts/verificar.mjs           # 99 comprobaciones con Playwright
+node scripts/verificar.mjs           # 102 comprobaciones con Playwright
 node scripts/verificar.mjs --capturas
 node scripts/contraste.mjs
 ```

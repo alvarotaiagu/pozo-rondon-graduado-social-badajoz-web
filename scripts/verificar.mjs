@@ -434,8 +434,17 @@ try {
         secciones: [...document.querySelectorAll('.regla__num')].map(b => parseFloat(b.style.top)), grados: parseFloat(document.querySelector('.cabecera__logo').dataset.grados) };
     });
     const arriba = await lee();
-    comprobar(arriba.seccion === 'Inicio' && arriba.indice <= 1 && arriba.marcas === 61 && arriba.secciones.length === 10, 'regla: arriba, en «Inicio», con 61 marcas y 10 secciones → ' + JSON.stringify(arriba));
+    comprobar(arriba.seccion === 'Inicio' && arriba.indice <= 1 && arriba.marcas === 61 && arriba.secciones.length === 11, 'regla: arriba, en «Inicio», con 61 marcas y 11 secciones → ' + JSON.stringify(arriba));
     comprobar(arriba.secciones.every((y, i) => i === 0 || y > arriba.secciones[i - 1]), 'regla: las secciones van en orden → ' + arriba.secciones.join(', '));
+    /* cambia cuando la sección ya llena la pantalla, no cuando toca la cabecera */
+    for (const [sel, nombre, alto] of [['#areas-titulo', 'Seis áreas', 180], ['#quien', 'Quién soy', 300], ['#opiniones', 'Opiniones', 300]]) {
+      await page.evaluate(([s, a]) => { const e = document.querySelector(s); window.scrollTo(0, e.getBoundingClientRect().top + window.pageYOffset - a); return 0; }, [sel, alto]);
+      await page.waitForTimeout(500);
+      const vista = await page.evaluate(() => document.getElementById('regla').dataset.seccion);
+      comprobar(vista === nombre, 'regla: con ' + sel + ' a ' + alto + ' px del borde ya dice «' + nombre + '» → ' + vista);
+    }
+    await page.evaluate(() => { window.scrollTo(0, 0); return 0; });
+    await page.waitForTimeout(1500);
     comprobar(Math.abs(arriba.grados - 13) < 0.2, 'logo: arriba del todo la balanza de la cabecera está inclinada 13° → ' + arriba.grados);
     await page.mouse.move(700, 400);
     await rueda(page, 6, 700);
@@ -451,7 +460,7 @@ try {
     await page.mouse.move(caja.x + caja.width - 16, caja.y + caja.height / 2, { steps: 5 });
     await page.waitForTimeout(700);
     const desplegada = await page.evaluate(() => ({ ancho: Math.round(document.getElementById('regla').getBoundingClientRect().width), visibles: [...document.querySelectorAll('.regla__num')].filter(b => parseFloat(getComputedStyle(b).opacity) > 0.5).length }));
-    comprobar(desplegada.ancho >= 270 && desplegada.visibles === 10, 'regla: con el ratón se despliega con las diez secciones → ' + JSON.stringify(desplegada));
+    comprobar(desplegada.ancho >= 270 && desplegada.visibles === 11, 'regla: con el ratón se despliega con las once secciones → ' + JSON.stringify(desplegada));
     if (conCapturas) await page.screenshot({ path: foto('12-regla-desplegada.png'), clip: { x: 1440 - 420, y: 0, width: 420, height: 900 } });
     await page.locator('.regla__num', { hasText: 'Opiniones' }).click();
     await page.waitForTimeout(2600);

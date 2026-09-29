@@ -620,9 +620,10 @@
 
   /* ───────────────── regla de precisión: escala graduada en el borde derecho ─────────────────
      El índice es el triángulo de su logo y al lado va el nombre de la sección. Cada
-     sección es una marca; las seis áreas caen donde su tarjeta se posa (el mismo
-     umbral con el que cae su pesa en la balanza pequeña). Con el ratón o el foco se
-     despliega y lleva a cualquier sección. */
+     sección es una marca, y cuenta como «actual» en cuanto su borde de arriba pasa
+     por el 45 % de la pantalla (ya ocupa casi todo lo que se ve), no cuando toca la
+     cabecera. Con el ratón o el foco se despliega; pulsar lleva al PRINCIPIO de la
+     sección (en las áreas, al punto en que la tarjeta se posa y cae su pesa). */
   (function regla() {
     var caja = document.getElementById('regla');
     var via = document.getElementById('regla-via');
@@ -632,8 +633,10 @@
     var items = Array.prototype.slice.call(document.querySelectorAll('.pila__item'));
     var lista = document.getElementById('pila');
     var ROMANOS = ['I', 'II', 'III', 'IV', 'V', 'VI'];
-    var secciones = [{ num: '', nombre: 'Inicio', el: document.getElementById('inicio') }]
-      .concat(items.map(function (li, i) { return { num: ROMANOS[i], nombre: li.querySelector('h3').textContent.trim(), li: li }; }))
+    var secciones = [
+      { num: '', nombre: 'Inicio', el: document.getElementById('inicio') },
+      { num: '', nombre: 'Seis áreas', el: document.querySelector('.areas__cabeza') }
+    ].concat(items.map(function (li, i) { return { num: ROMANOS[i], nombre: li.querySelector('h3').textContent.trim(), li: li }; }))
       .concat([
         { num: '', nombre: 'Quién soy', el: document.getElementById('quien') },
         { num: '', nombre: 'Opiniones', el: document.getElementById('opiniones') },
@@ -665,17 +668,22 @@
       var pegada = items.length && getComputedStyle(items[0]).position === 'sticky';
       var umbral = pegada ? tope() + 2 : window.innerHeight * 0.55;
       var y0 = lista ? lista.getBoundingClientRect().top + window.pageYOffset : 0;
-      var acumulado = 0;
-      secciones.forEach(function (s) {
-        var y;
+      var acumulado = 0, lectura = window.innerHeight * 0.45, anterior = -1;
+      secciones.forEach(function (s, i) {
+        var arriba;
         if (s.li) {
           /* anclada, la tarjeta miente en su rect (marca el tope): se suma la posición natural */
-          y = (pegada ? y0 + acumulado : s.li.getBoundingClientRect().top + window.pageYOffset) - umbral;
+          arriba = pegada ? y0 + acumulado : s.li.getBoundingClientRect().top + window.pageYOffset;
           acumulado += s.li.offsetHeight + parseFloat(getComputedStyle(s.li).marginBottom || 0);
+          s.destino = arriba - umbral;
         } else {
-          y = s.el.getBoundingClientRect().top + window.pageYOffset - alturaCabecera();
+          arriba = s.el.getBoundingClientRect().top + window.pageYOffset;
+          s.destino = arriba - alturaCabecera();
         }
-        s.y = Math.max(0, Math.min(total, y));
+        /* la marca: cuando su borde de arriba cruza la línea de lectura; siempre en orden */
+        s.y = i === 0 ? 0 : Math.max(anterior + 1, Math.min(total, arriba - lectura));
+        s.destino = Math.max(0, Math.min(total, s.destino));
+        anterior = s.y;
         var f = (s.y / total * 100).toFixed(3) + '%';
         s.raya.style.top = f;
         s.boton.style.top = f;
@@ -712,7 +720,7 @@
       aviso = setTimeout(function () { caja.classList.remove('regla--aviso'); }, 1800);
     }
     function ir(n) {
-      var destino = secciones[n].y + (secciones[n].li ? 4 : 1);
+      var destino = secciones[n].destino + (secciones[n].li ? 4 : 1);
       if (lenis) lenis.scrollTo(destino, { duration: 1.4 });
       else window.scrollTo(0, destino);
     }
